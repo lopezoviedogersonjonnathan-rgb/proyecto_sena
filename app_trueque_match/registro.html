@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trueque Match — Registro</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { display:flex; min-height:100vh; }
+    .auth-left { flex:1; background:var(--gris-card); border-right:1px solid var(--gris-borde); display:flex; flex-direction:column; justify-content:center; align-items:center; padding:60px 40px; position:relative; overflow:hidden; }
+    .auth-left::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 70% 60% at 70% 50%, rgba(192,57,43,0.10), transparent); }
+    .auth-left > * { position:relative; z-index:1; }
+    .auth-right { width:520px; flex-shrink:0; display:flex; flex-direction:column; justify-content:center; padding:48px; overflow-y:auto; }
+    @media(max-width:768px){ .auth-left{display:none;} .auth-right{width:100%; padding:32px 24px;} }
+    .benefits { display:flex; flex-direction:column; gap:16px; margin-top:24px; }
+    .benefit { display:flex; align-items:center; gap:12px; }
+    .benefit-icon { width:40px; height:40px; border-radius:var(--radius-md); background:var(--rojo-light); border:1px solid var(--rojo-border); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .benefit-text strong { display:block; font-size:14px; color:var(--blanco-calido); }
+    .benefit-text span { font-size:12px; color:var(--gris-medio); }
+    .error-msg { background:rgba(192,57,43,.12); border:1px solid var(--rojo-border); border-radius:var(--radius-md); padding:10px 14px; font-size:13px; color:var(--rojo-tm); display:none; }
+    .error-msg.show { display:block; }
+    .success-msg { background:rgba(39,174,96,.12); border:1px solid rgba(39,174,96,.35); border-radius:var(--radius-md); padding:16px; text-align:center; display:none; }
+    .success-msg.show { display:block; }
+    .password-req { font-size:12px; color:var(--gris-medio); margin-top:4px; }
+    .progress-bar { height:4px; border-radius:2px; background:var(--gris-borde); overflow:hidden; margin-top:6px; }
+    .progress-fill { height:100%; border-radius:2px; transition:all .3s; background:var(--rojo-tm); width:0%; }
+  </style>
+</head>
+<body>
+  <div class="auth-left">
+    <div style="font-size:56px;">🌱</div>
+    <div style="font-family:var(--font-display); font-size:56px; color:var(--blanco-calido); line-height:.9; letter-spacing:3px; margin:20px 0 16px; position:relative; z-index:1;">CREA TU<br><span style="color:var(--rojo-tm)">CUENTA</span><br>GRATIS</div>
+    <p style="color:var(--gris-medio); max-width:300px; font-size:14px; line-height:1.7; position:relative; z-index:1;">Registrarte es gratis y solo toma un minuto. Empieza a intercambiar hoy mismo.</p>
+    <div class="benefits">
+      <div class="benefit"><div class="benefit-icon">📦</div><div class="benefit-text"><strong>Publica sin límites</strong><span>Sube todas las ofertas que quieras</span></div></div>
+      <div class="benefit"><div class="benefit-icon">🔒</div><div class="benefit-text"><strong>100% seguro</strong><span>Protegemos tus datos (Ley 1581/2012)</span></div></div>
+      <div class="benefit"><div class="benefit-icon">⭐</div><div class="benefit-text"><strong>Sistema de reputación</strong><span>Construye tu confianza en la comunidad</span></div></div>
+    </div>
+  </div>
+
+  <div class="auth-right">
+    <a href="index.html" class="navbar-brand" style="display:inline-block; margin-bottom:28px;"><img src="LOGO_FINAL.png" alt="Trueque Match" style="height:52px; width:auto;"></a>
+    <div style="font-family:var(--font-display); font-size:28px; color:var(--blanco-calido); margin-bottom:4px;">CREAR CUENTA</div>
+    <p style="color:var(--gris-medio); font-size:14px; margin-bottom:28px;">Únete a la comunidad Trueque Match</p>
+
+    <div id="errorMsg" class="error-msg mb-md"><i class="fa fa-exclamation-circle"></i> <span id="errorText"></span></div>
+    <div id="successMsg" class="success-msg mb-md">
+      <div style="font-size:32px; margin-bottom:8px;">🎉</div>
+      <strong style="color:var(--verde); display:block; font-size:16px;">¡Cuenta creada exitosamente!</strong>
+      <p style="color:var(--gris-medio); font-size:14px; margin-top:6px;">Redirigiendo al inicio de sesión...</p>
+    </div>
+
+    <form id="regForm" style="display:flex; flex-direction:column; gap:16px;" novalidate>
+      <div class="grid-2">
+        <div class="form-group">
+          <label class="form-label">Nombre</label>
+          <input type="text" id="nombre" class="form-control" placeholder="Tu nombre" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Apellido</label>
+          <input type="text" id="apellido" class="form-control" placeholder="Tu apellido" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Correo electrónico</label>
+        <input type="email" id="correo" class="form-control" placeholder="tu@correo.com" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Ciudad</label>
+        <select id="ciudad" class="form-control" style="cursor:pointer;">
+          <option value="">Selecciona tu ciudad</option>
+          <option>Bogotá</option><option>Medellín</option><option>Cali</option>
+          <option>Barranquilla</option><option>Cartagena</option><option>Otra</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <input type="password" id="pass1" class="form-control" placeholder="Mínimo 8 caracteres" required oninput="checkPass()">
+        <div class="progress-bar"><div class="progress-fill" id="passStrength"></div></div>
+        <div class="password-req" id="passReq">Escribe tu contraseña</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirmar contraseña</label>
+        <input type="password" id="pass2" class="form-control" placeholder="Repite tu contraseña" required>
+      </div>
+      <div style="display:flex; gap:8px; align-items:flex-start; font-size:12px; color:var(--gris-medio);">
+        <input type="checkbox" id="terminos" style="margin-top:3px; accent-color:var(--rojo-tm);">
+        <label for="terminos">Acepto los <a href="#">Términos de uso</a> y la <a href="#">Política de datos personales</a> conforme a la Ley 1581 de 2012.</label>
+      </div>
+      <button type="submit" class="btn btn-primary btn-full btn-lg">CREAR MI CUENTA</button>
+    </form>
+
+    <div class="divider-text mt-md mb-md">o</div>
+    <a href="login.html" class="btn btn-secondary btn-full">Ya tengo cuenta — <strong>&nbsp;Ingresar</strong></a>
+  </div>
+
+  <script>
+    function checkPass() {
+      const v = document.getElementById('pass1').value;
+      const bar = document.getElementById('passStrength');
+      const req = document.getElementById('passReq');
+      let score = 0;
+      if (v.length >= 8) score++;
+      if (/[A-Z]/.test(v)) score++;
+      if (/[0-9]/.test(v)) score++;
+      if (/[^A-Za-z0-9]/.test(v)) score++;
+      const colors = ['#C0392B','#F39C12','#F39C12','#27AE60','#27AE60'];
+      const labels = ['','Débil','Regular','Buena','Fuerte'];
+      bar.style.width = (score * 25) + '%';
+      bar.style.background = colors[score];
+      req.textContent = score === 0 ? 'Mínimo 8 caracteres' : 'Seguridad: ' + labels[score];
+      req.style.color = colors[score] || 'var(--gris-medio)';
+    }
+    document.getElementById('regForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const n=document.getElementById('nombre').value.trim();
+      const a=document.getElementById('apellido').value.trim();
+      const c=document.getElementById('correo').value.trim();
+      const p1=document.getElementById('pass1').value;
+      const p2=document.getElementById('pass2').value;
+      const t=document.getElementById('terminos').checked;
+      const err=document.getElementById('errorMsg');
+      const errT=document.getElementById('errorText');
+      const ok=document.getElementById('successMsg');
+      if (!n||!a||!c||!p1||!p2) { errT.textContent='Completa todos los campos.'; err.classList.add('show'); return; }
+      if (!c.includes('@')) { errT.textContent='Correo no válido.'; err.classList.add('show'); return; }
+      if (p1.length < 8) { errT.textContent='La contraseña debe tener mínimo 8 caracteres.'; err.classList.add('show'); return; }
+      if (p1 !== p2) { errT.textContent='Las contraseñas no coinciden.'; err.classList.add('show'); return; }
+      if (!t) { errT.textContent='Debes aceptar los términos y condiciones.'; err.classList.add('show'); return; }
+      err.classList.remove('show');
+      document.getElementById('regForm').style.display = 'none';
+      ok.classList.add('show');
+      setTimeout(() => window.location.href = 'login.html', 2500);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trueque Match — ¿Cómo Funciona?</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+.steps-timeline { position:relative; }
+.steps-timeline::before { content:''; position:absolute; left:28px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom, var(--rojo-tm), var(--gris-borde)); }
+.step-row { display:flex; gap:24px; align-items:flex-start; margin-bottom:40px; position:relative; }
+.step-num { width:56px; height:56px; border-radius:50%; background:var(--rojo-tm); color:#fff; font-family:var(--font-display); font-size:22px; display:flex; align-items:center; justify-content:center; flex-shrink:0; position:relative; z-index:1; box-shadow:0 0 20px rgba(192,57,43,.4); }
+.step-content { flex:1; padding-top:10px; }
+.step-title { font-family:var(--font-display); font-size:22px; color:var(--blanco-calido); letter-spacing:1px; margin-bottom:8px; }
+.step-desc { color:var(--gris-medio); font-size:15px; line-height:1.7; }
+.step-example { background:var(--gris-card); border:1px solid var(--gris-borde); border-radius:var(--radius-md); padding:14px 16px; margin-top:12px; font-size:14px; display:flex; align-items:center; gap:10px; }
+.faq-item { background:var(--gris-card); border:1px solid var(--gris-borde); border-radius:var(--radius-lg); margin-bottom:10px; overflow:hidden; }
+.faq-header { padding:16px 20px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; transition:var(--transition); }
+.faq-header:hover { background:var(--gris-borde); }
+.faq-q { font-weight:700; font-size:15px; }
+.faq-body { padding:0 20px; max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s; }
+.faq-body.open { max-height:200px; padding:0 20px 16px; }
+.faq-a { color:var(--gris-medio); font-size:14px; line-height:1.7; }
+.feature-row { display:flex; gap:20px; align-items:center; padding:20px 0; border-bottom:1px solid var(--gris-borde); }
+.feature-row:last-child { border:none; }
+.feature-em { font-size:36px; flex-shrink:0; width:56px; text-align:center; }
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <a href="index.html" class="navbar-brand"><img src="LOGO_FINAL.png" alt="Trueque Match" style="height:44px; width:auto;"></a>
+  <div class="navbar-nav">
+    <a href="index.html" class="nav-link">Inicio</a>
+    <a href="ofertas.html" class="nav-link">Ofertas</a>
+    <a href="como-funciona.html" class="nav-link active">¿Cómo funciona?</a>
+    <a href="login.html" class="btn btn-secondary btn-sm" style="margin-left:8px">Ingresar</a>
+    <a href="registro.html" class="btn btn-primary btn-sm">Registrarse</a>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+    <div class="text-center mb-lg">
+      <h1 class="hero-title" style="font-size:clamp(36px,5vw,64px);">¿CÓMO<br><span style="color:var(--rojo-tm)">FUNCIONA?</span></h1>
+      <p class="hero-subtitle">Todo lo que necesitas saber para tu primer trueque</p>
+    </div>
+
+    <!-- PASOS -->
+    <div class="steps-timeline" style="max-width:700px; margin:0 auto;">
+      <div class="step-row">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">CREA TU CUENTA GRATIS</div>
+          <div class="step-desc">Regístrate con tu correo en menos de 1 minuto. No necesitas tarjeta de crédito ni información de pago. Tu cuenta está protegida bajo la Ley 1581/2012 de protección de datos personales.</div>
+          <a href="registro.html" class="btn btn-primary btn-sm mt-sm">Crear cuenta <i class="fa fa-arrow-right"></i></a>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">PUBLICA LO QUE TIENES</div>
+          <div class="step-desc">Crea una oferta con foto, título y descripción de lo que quieres intercambiar. Puede ser un objeto físico, un servicio, tus conocimientos o una experiencia única.</div>
+          <div class="step-example"><span style="font-size:22px">💡</span><div><strong>Ejemplo:</strong> "Tengo una bicicleta de montaña rodado 26 que ya no uso. La ofrezco a cambio de clases de guitarra o diseño gráfico."</div></div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">EXPLORA Y PROPÓN TRUEQUES</div>
+          <div class="step-desc">Navega por las ofertas de la comunidad. Cuando encuentres algo que te interese, envía una propuesta de trueque indicando qué ofreces tú a cambio.</div>
+          <div class="step-example"><span style="font-size:22px">🔍</span><div>Usa los filtros por <strong>categoría</strong> y <strong>ciudad</strong> para encontrar lo que necesitas más fácil.</div></div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <div class="step-title">NEGOCIA POR EL CHAT</div>
+          <div class="step-desc">Una vez enviada la propuesta, el chat integrado permite acordar los detalles del intercambio: lugar, fecha, condiciones del producto o servicio.</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <div class="step-title">¡REALIZA EL INTERCAMBIO!</div>
+          <div class="step-desc">Acuerden el encuentro y realicen el intercambio. Al completarlo, ambas partes se evalúan mutuamente con una calificación de 1 a 5 estrellas, construyendo así su reputación en la plataforma.</div>
+          <div class="step-example"><span style="font-size:22px">⭐</span><div>Una buena reputación te ayuda a conseguir más y mejores trueques en el futuro.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIAS EXPLICADAS -->
+<section class="section" style="background:var(--gris-card); border-top:1px solid var(--gris-borde); border-bottom:1px solid var(--gris-borde);">
+  <div class="container">
+    <h2 class="section-title text-center">QUÉ PUEDES INTERCAMBIAR</h2>
+    <p class="section-subtitle text-center">4 categorías para todo tipo de trueques</p>
+    <div class="grid-4 mt-lg">
+      <div class="card"><div style="font-size:40px; margin-bottom:12px;">📦</div><h3 style="font-size:16px; margin-bottom:8px;">PRODUCTOS</h3><p style="color:var(--gris-medio); font-size:13px; line-height:1.6;">Ropa, electrónicos, libros, muebles, herramientas, juguetes, bicicletas y cualquier objeto físico en buen estado.</p></div>
+      <div class="card"><div style="font-size:40px; margin-bottom:12px;">🛠️</div><h3 style="font-size:16px; margin-bottom:8px;">SERVICIOS</h3><p style="color:var(--gris-medio); font-size:13px; line-height:1.6;">Plomería, electricidad, diseño gráfico, programación, peluquería, mecánica, contabilidad y más.</p></div>
+      <div class="card"><div style="font-size:40px; margin-bottom:12px;">📚</div><h3 style="font-size:16px; margin-bottom:8px;">CONOCIMIENTO</h3><p style="color:var(--gris-medio); font-size:13px; line-height:1.6;">Clases de idiomas, música, matemáticas, programación, cocina, yoga, manualidades o cualquier saber.</p></div>
+      <div class="card"><div style="font-size:40px; margin-bottom:12px;">🎭</div><h3 style="font-size:16px; margin-bottom:8px;">EXPERIENCIAS</h3><p style="color:var(--gris-medio); font-size:13px; line-height:1.6;">Tours guiados, cenas temáticas, sesiones fotográficas, eventos culturales y vivencias únicas.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container" style="max-width:700px;">
+    <h2 class="section-title text-center">PREGUNTAS FRECUENTES</h2>
+    <p class="section-subtitle text-center">Todo lo que necesitas saber</p>
+    <div class="mt-lg">
+      <div class="faq-item"><div class="faq-header" onclick="toggleFaq(this)"><span class="faq-q">¿Es completamente gratis usar Trueque Match?</span><i class="fa fa-plus"></i></div><div class="faq-body"><p class="faq-a">Sí, 100% gratis. No cobramos comisiones por los trueques ni por publicar ofertas. La plataforma se sostiene en su fase inicial sin costo para los usuarios.</p></div></div>
+      <div class="faq-item"><div class="faq-header" onclick="toggleFaq(this)"><span class="faq-q">¿Cómo sé que puedo confiar en el otro usuario?</span><i class="fa fa-plus"></i></div><div class="faq-body"><p class="faq-a">Cada usuario tiene un sistema de reputación con calificaciones de 1 a 5 estrellas y comentarios de trueques anteriores. Te recomendamos siempre revisar el historial antes de intercambiar y preferir usuarios con buenas calificaciones.</p></div></div>
+      <div class="faq-item"><div class="faq-header" onclick="toggleFaq(this)"><span class="faq-q">¿Trueque Match protege mis datos personales?</span><i class="fa fa-plus"></i></div><div class="faq-body"><p class="faq-a">Absolutamente. Cumplimos con la Ley 1581 de 2012 de protección de datos personales de Colombia. Tus datos nunca son vendidos ni compartidos con terceros sin tu autorización explícita.</p></div></div>
+      <div class="faq-item"><div class="faq-header" onclick="toggleFaq(this)"><span class="faq-q">¿Qué pasa si el otro usuario no cumple el trueque?</span><i class="fa fa-plus"></i></div><div class="faq-body"><p class="faq-a">Puedes reportar al usuario desde el perfil de trueque. Nuestro equipo de moderación revisa cada reporte y puede suspender cuentas que incumplan las normas de la comunidad.</p></div></div>
+      <div class="faq-item"><div class="faq-header" onclick="toggleFaq(this)"><span class="faq-q">¿En qué ciudades de Colombia está disponible?</span><i class="fa fa-plus"></i></div><div class="faq-body"><p class="faq-a">Trueque Match está disponible en todo el territorio colombiano. Actualmente tenemos mayor actividad en Bogotá, Medellín, Cali, Barranquilla y Cartagena, pero puedes publicar desde cualquier ciudad.</p></div></div>
+    </div>
+    <div class="text-center mt-lg">
+      <a href="registro.html" class="btn btn-primary btn-lg"><i class="fa fa-handshake"></i> &nbsp;Empezar a truequear</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom" style="border:none; padding:0; margin:0;">
+      <p>© 2026 Trueque Match · G.L. Software Solutions · Bogotá, Colombia</p>
+      <p>Gerson López Oviedo · Ficha 3186647 · SENA</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(header) {
+  const body = header.nextElementSibling;
+  const icon = header.querySelector('i');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.faq-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.faq-header i').forEach(i => { i.className='fa fa-plus'; });
+  if (!isOpen) { body.classList.add('open'); icon.className = 'fa fa-minus'; }
+}
+</script>
+</body>
+</html>
