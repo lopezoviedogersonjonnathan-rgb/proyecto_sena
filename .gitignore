@@ -1,0 +1,30 @@
+# =======================================================================
+# CONFIGURACIONES DE ENTORNO LOCAL Y BASES DE DATOS (XAMPP / PHP)
+# =======================================================================
+# Ignorar respaldos o archivos temporales de bases de datos pesadas
+*.sql
+*.sql.bak
+*.sql.gz
+
+# Ignorar archivos de configuración local con contraseñas o credenciales reales
+config.local.php
+.env
+
+# =======================================================================
+# BASURA DEL SISTEMA OPERATIVO (WINDOWS / MAC)
+# =======================================================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# =======================================================================
+# ARCHIVOS DE CONFIGURACIÓN DEL EDITOR (VISUAL STUDIO CODE)
+# =======================================================================
+.vscode/
+*.code-workspace
