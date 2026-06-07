@@ -1,3 +1,117 @@
+<?php
+/*
+ * =============================================
+ * TRUEQUE MATCH — dashboard.php
+ * Muestra datos reales del usuario logueado
+ * Gerson Jonnathan López Oviedo | Ficha 3186647
+ * =============================================
+ */
+
+// session_start() activa las sesiones
+// Es como abrir la caja donde guardamos
+// los datos del usuario que inició sesión
+session_start();
+
+// Si no hay sesión activa significa que
+// el usuario no ha iniciado sesión
+// Lo mandamos al login de inmediato
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+// Incluimos la conexión a la BD
+// Los .. significan "subir una carpeta"
+// porque conexion.php está en proyecto_sena/
+include('../conexion.php');
+
+// Guardamos el ID del usuario en una variable
+// para usarlo en todas las consultas
+$usuario_id     = $_SESSION['usuario_id'];
+$usuario_nombre = $_SESSION['usuario_nombre'];
+
+// =============================================
+// CONSULTA 1: Contar mis ofertas
+// COUNT(*) cuenta cuántas filas devuelve
+// WHERE filtra solo las ofertas de este usuario
+// =============================================
+$r_ofertas = mysqli_query($conexion,
+    "SELECT COUNT(*) AS total FROM OFERTA
+     WHERE id_usuario = $usuario_id"
+);
+$total_ofertas = mysqli_fetch_assoc($r_ofertas)['total'];
+
+// =============================================
+// CONSULTA 2: Contar mis trueques
+// Buscamos trueques donde el usuario propone
+// O donde el usuario recibe (por eso el OR)
+// =============================================
+$r_trueques = mysqli_query($conexion,
+    "SELECT COUNT(*) AS total FROM TRUEQUE
+     WHERE id_usuario_propone = $usuario_id
+     OR id_usuario_recibe = $usuario_id"
+);
+$total_trueques = mysqli_fetch_assoc($r_trueques)['total'];
+
+// =============================================
+// CONSULTA 3: Mi reputación promedio
+// COALESCE devuelve 0 si no hay evaluaciones
+// AVG calcula el promedio de los puntajes
+// =============================================
+$r_rep = mysqli_query($conexion,
+    "SELECT COALESCE(AVG(e.puntaje), 0) AS promedio
+     FROM EVALUACION e
+     JOIN TRUEQUE t ON e.id_trueque = t.id_trueque
+     WHERE t.id_usuario_propone = $usuario_id
+     OR t.id_usuario_recibe = $usuario_id"
+);
+$reputacion = number_format(mysqli_fetch_assoc($r_rep)['promedio'], 1);
+
+// =============================================
+// CONSULTA 4: Mis favoritos guardados
+// =============================================
+$r_favs = mysqli_query($conexion,
+    "SELECT COUNT(*) AS total FROM USUARIO_OFERTA
+     WHERE id_usuario = $usuario_id"
+);
+$total_favs = mysqli_fetch_assoc($r_favs)['total'];
+
+// =============================================
+// CONSULTA 5: Mis trueques pendientes
+// para mostrarlos en la tabla del dashboard
+// =============================================
+$r_pendientes = mysqli_query($conexion,
+    "SELECT t.*,
+            o1.titulo AS oferta_propone,
+            o2.titulo AS oferta_recibe,
+            u.nombre  AS nombre_otro_usuario
+     FROM TRUEQUE t
+     JOIN OFERTA o1 ON t.id_oferta_propone = o1.id_oferta
+     JOIN OFERTA o2 ON t.id_oferta_recibe  = o2.id_oferta
+     JOIN USUARIO u ON (
+         CASE
+             WHEN t.id_usuario_propone = $usuario_id
+             THEN t.id_usuario_recibe
+             ELSE t.id_usuario_propone
+         END = u.id_usuario
+     )
+     WHERE t.id_usuario_propone = $usuario_id
+     OR t.id_usuario_recibe = $usuario_id
+     ORDER BY t.fecha_propuesta DESC
+     LIMIT 5"
+);
+
+// =============================================
+// CONSULTA 6: Notificaciones no leídas
+// =============================================
+$r_notifs = mysqli_query($conexion,
+    "SELECT COUNT(*) AS total FROM NOTIFICACION
+     WHERE id_usuario = $usuario_id AND leida = 0"
+);
+$notifs_sin_leer = mysqli_fetch_assoc($r_notifs)['total'];
+
+mysqli_close($conexion);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -175,7 +289,7 @@
     <div class="sidebar-user">
       <div class="avatar avatar-md" id="sidebarAvatar">G</div>
       <div>
-        <div style="font-size:14px; font-weight:700;" id="sidebarName">Gerson</div>
+        <div style="font-size:14px; font-weight:700;" id="sidebarName"><?php echo $usuario_nombre; ?></div>
         <div style="font-size:12px; color:var(--verde);">● En línea</div>
       </div>
     </div>
@@ -210,10 +324,10 @@
       </div>
       <div class="page-body">
         <div class="stats-row">
-          <div class="stat-card"><div class="stat-card-icon">📦</div><div class="stat-card-num">8</div><div class="stat-card-label">Mis Ofertas</div><div class="stat-card-delta">↑ 2 esta semana</div></div>
-          <div class="stat-card"><div class="stat-card-icon">🔄</div><div class="stat-card-num">12</div><div class="stat-card-label">Trueques</div><div class="stat-card-delta">↑ 1 nuevo</div></div>
-          <div class="stat-card"><div class="stat-card-icon">⭐</div><div class="stat-card-num">4.8</div><div class="stat-card-label">Reputación</div><div class="stat-card-delta">Top 10% de la ciudad</div></div>
-          <div class="stat-card"><div class="stat-card-icon">❤️</div><div class="stat-card-num">24</div><div class="stat-card-label">Favoritos</div><div class="stat-card-delta">3 nuevos guardados</div></div>
+          <div class="stat-card"><div class="stat-card-icon">📦</div><div class="stat-card-num"><?php echo $total_ofertas; ?></div><div class="stat-card-label">Mis Ofertas</div><div class="stat-card-delta">↑ 2 esta semana</div></div>
+          <div class="stat-card"><div class="stat-card-icon">🔄</div><div class="stat-card-num"><?php echo $total_trueques; ?></div><div class="stat-card-label">Trueques</div><div class="stat-card-delta">↑ 1 nuevo</div></div>
+          <div class="stat-card"><div class="stat-card-icon">⭐</div><div class="stat-card-num"><?php echo $reputacion; ?></div><div class="stat-card-label">Reputación</div><div class="stat-card-delta">Top 10% de la ciudad</div></div>
+          <div class="stat-card"><div class="stat-card-icon">❤️</div><div class="stat-card-num"><?php echo $total_favs; ?></div><div class="stat-card-label">Favoritos</div><div class="stat-card-delta">3 nuevos guardados</div></div>
         </div>
 
         <!-- TRUEQUES PENDIENTES -->
@@ -655,8 +769,7 @@ function showToast(msg) {
 
 // --- LOGOUT ---
 function logout() {
-  sessionStorage.clear();
-  window.location.href = 'login.html';
+  window.location.href = 'cerrar_sesion.php';
 }
 </script>
 </body>

@@ -4,7 +4,7 @@
  * TRUEQUE MATCH — ofertas.php
  * Página que lee y muestra las ofertas de la BD
  * Demuestra el READ del CRUD
- * Gerson Jonnathan López Oviedo | Ficha 3186647
+ * Gerson Jonnathan López Oviedo | Ficha 3186647x
  * =============================================
  */
 

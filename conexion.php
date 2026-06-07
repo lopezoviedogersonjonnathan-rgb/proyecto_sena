@@ -25,5 +25,5 @@ if (!$conexion) {
 mysqli_set_charset($conexion, "utf8");
 
 // Este mensaje es solo para probar — lo quitamos después
-echo "✅ Conexión exitosa a trueque_match_db";
+// echo "✅ Conexión exitosa a trueque_match_db";
 ?>
