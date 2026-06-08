@@ -26,7 +26,7 @@ $tipo_msg = "";
  * directo al dashboard — no tiene sentido volver a loguearse
  */
 if (isset($_SESSION['usuario_id'])) {
-    header('Location: dashboard.html');
+   header('Location: dashboard.php');
     exit();
 }
 
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  * header('Location:') redirige al usuario a otra página
                  * exit() detiene el script después de redirigir
                  */
-                header('Location: dashboard.html');
+                header('Location: dashboard.php');
                 exit();
 
             } else {

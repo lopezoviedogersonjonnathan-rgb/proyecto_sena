@@ -401,22 +401,69 @@ mysqli_close($conexion);
     </div>
 
     <!-- ===== SECCIÓN: MIS OFERTAS ===== -->
+    <!--
+      Esta sección antes tenía datos falsos (hardcodeados).
+      Ahora carga las ofertas REALES del usuario desde la BD
+      usando fetch() que es como mandarle un mensajito a PHP
+      y esperar la respuesta sin recargar la página.
+    -->
     <div id="sec-mis-ofertas" style="display:none;">
       <div class="page-header">
-        <div class="page-title">MIS OFERTAS</div>
-        <button class="btn btn-primary" onclick="showModal('modalOferta')"><i class="fa fa-plus"></i> Nueva oferta</button>
+        <div>
+          <div class="page-title">MIS OFERTAS</div>
+          <!--
+            Este span se actualiza automáticamente
+            con el total real de ofertas del usuario
+          -->
+          <div style="font-size:13px; color:var(--gris-medio);">
+            Total: <span id="misOfertasTotal">...</span> publicadas
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="showModal('modalOferta')">
+          <i class="fa fa-plus"></i> Nueva oferta
+        </button>
       </div>
+
       <div class="page-body">
+
+        <!--
+          TABS = pestañas para filtrar por estado
+          Cada botón llama a filtrarMisOfertas() con el estado
+          'todos', 'activa', 'intercambiada', 'inactiva'
+        -->
         <div class="tabs-bar">
-          <button class="tab-btn active">Activas (3)</button>
-          <button class="tab-btn">Intercambiadas (5)</button>
-          <button class="tab-btn">Inactivas (0)</button>
+          <button class="tab-btn active"
+                  onclick="filtrarMisOfertas(this, 'todos')">
+            Todas
+          </button>
+          <button class="tab-btn"
+                  onclick="filtrarMisOfertas(this, 'activa')">
+            Activas
+          </button>
+          <button class="tab-btn"
+                  onclick="filtrarMisOfertas(this, 'intercambiada')">
+            Intercambiadas
+          </button>
+          <button class="tab-btn"
+                  onclick="filtrarMisOfertas(this, 'inactiva')">
+            Inactivas
+          </button>
         </div>
-        <div class="oferta-grid">
-          <div class="oc"><div class="oc-img">🔧</div><div class="oc-body"><div class="oc-title">Reparación de PC</div><div class="oc-meta">Servicio · Bogotá</div></div><div class="oc-footer"><button class="btn btn-ghost btn-sm" onclick="showToast('✏️ Editando oferta...')">Editar</button><button class="btn btn-secondary btn-sm" onclick="showToast('🗑️ Oferta eliminada')">Eliminar</button></div></div>
-          <div class="oc"><div class="oc-img">📱</div><div class="oc-body"><div class="oc-title">Curso React Native</div><div class="oc-meta">Conocimiento · Bogotá</div></div><div class="oc-footer"><button class="btn btn-ghost btn-sm" onclick="showToast('✏️ Editando oferta...')">Editar</button><button class="btn btn-secondary btn-sm" onclick="showToast('🗑️ Oferta eliminada')">Eliminar</button></div></div>
-          <div class="oc"><div class="oc-img">🎭</div><div class="oc-body"><div class="oc-title">Tour fotográfico Bogotá</div><div class="oc-meta">Experiencia · Bogotá</div></div><div class="oc-footer"><button class="btn btn-ghost btn-sm" onclick="showToast('✏️ Editando oferta...')">Editar</button><button class="btn btn-secondary btn-sm" onclick="showToast('🗑️ Oferta eliminada')">Eliminar</button></div></div>
+
+        <!--
+          Este div es el CONTENEDOR donde PHP va a poner
+          las tarjetas de ofertas reales.
+          Empieza con un mensaje de "cargando..."
+          que desaparece cuando llegan los datos.
+          Es como el letrero de "un momento por favor"
+          de una tienda mientras te atienden.
+        -->
+        <div id="misOfertasGrid" class="oferta-grid">
+          <div style="color:var(--gris-medio); font-size:14px; padding:20px;">
+            <i class="fa fa-spinner fa-spin"></i> Cargando tus ofertas...
+          </div>
         </div>
+
       </div>
     </div>
 
@@ -604,39 +651,83 @@ mysqli_close($conexion);
 <div class="modal-overlay" id="modalOferta" onclick="if(event.target===this)closeModal('modalOferta')">
   <div class="modal" style="max-width:560px;">
     <div class="modal-title">PUBLICAR NUEVA OFERTA</div>
-    <form style="display:flex; flex-direction:column; gap:16px;" onsubmit="submitOferta(event)">
-      <div class="form-group">
-        <label class="form-label">Título de la oferta</label>
-        <input type="text" class="form-control" placeholder="¿Qué ofreces?" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Descripción</label>
-        <textarea class="form-control" placeholder="Describe tu oferta con detalle..." required></textarea>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Categoría</label>
-        <div class="cat-selector">
-          <div class="cat-option selected" onclick="selectCat(this)">📦 Producto</div>
-          <div class="cat-option" onclick="selectCat(this)">🛠️ Servicio</div>
-          <div class="cat-option" onclick="selectCat(this)">📚 Conocimiento</div>
-          <div class="cat-option" onclick="selectCat(this)">🎭 Experiencia</div>
-        </div>
-      </div>
-      <div class="form-cols">
-        <div class="form-group">
-          <label class="form-label">Ciudad</label>
-          <select class="form-control"><option>Bogotá</option><option>Medellín</option><option>Cali</option><option>Barranquilla</option></select>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Valor estimado (COP)</label>
-          <input type="number" class="form-control" placeholder="Opcional">
-        </div>
-      </div>
-      <div style="display:flex; gap:10px; margin-top:8px;">
-        <button type="button" class="btn btn-ghost btn-full" onclick="closeModal('modalOferta')">Cancelar</button>
-        <button type="submit" class="btn btn-primary btn-full">PUBLICAR OFERTA</button>
-      </div>
-    </form>
+    <form id="formNuevaOferta"
+      style="display:flex; flex-direction:column; gap:16px;"
+      onsubmit="submitOferta(event)">
+
+  <div class="form-group">
+    <label class="form-label">Título de la oferta</label>
+    <input type="text"
+           id="oferta_titulo"
+           name="titulo"
+           class="form-control"
+           placeholder="¿Qué ofreces?"
+           required
+           maxlength="200">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Descripción</label>
+    <textarea id="oferta_descripcion"
+              name="descripcion"
+              class="form-control"
+              placeholder="Describe tu oferta con detalle..."
+              required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Categoría</label>
+    <input type="hidden"
+           id="oferta_categoria"
+           name="categoria"
+           value="producto">
+    <div class="cat-selector">
+      <div class="cat-option selected" onclick="selectCat(this,'producto')">📦 Producto</div>
+      <div class="cat-option" onclick="selectCat(this,'servicio')">🛠️ Servicio</div>
+      <div class="cat-option" onclick="selectCat(this,'conocimiento')">📚 Conocimiento</div>
+      <div class="cat-option" onclick="selectCat(this,'experiencia')">🎭 Experiencia</div>
+    </div>
+  </div>
+
+  <div class="form-cols">
+    <div class="form-group">
+      <label class="form-label">Ciudad</label>
+      <select id="oferta_ciudad"
+              name="ciudad"
+              class="form-control">
+        <option value="Bogotá">Bogotá</option>
+        <option value="Medellín">Medellín</option>
+        <option value="Cali">Cali</option>
+        <option value="Barranquilla">Barranquilla</option>
+        <option value="Cartagena">Cartagena</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Valor estimado (COP)</label>
+      <input type="number"
+             id="oferta_valor"
+             name="valor_estimado"
+             class="form-control"
+             placeholder="Opcional"
+             min="0"
+             step="1000">
+    </div>
+  </div>
+
+  <div style="display:flex; gap:10px; margin-top:8px;">
+    <button type="button"
+            class="btn btn-ghost btn-full"
+            onclick="closeModal('modalOferta')">
+      Cancelar
+    </button>
+    <button type="submit"
+            id="btnPublicar"
+            class="btn btn-primary btn-full">
+      PUBLICAR OFERTA
+    </button>
+  </div>
+  
+</form>
   </div>
 </div>
 
@@ -659,10 +750,29 @@ window.onload = function() {
 // --- SECTIONS ---
 const sections = ['home','ofertas','mis-ofertas','trueques','chat','perfil','notificaciones'];
 function showSection(id) {
-  sections.forEach(s => { document.getElementById('sec-'+s).style.display = 'none'; });
+  // Ocultamos todas las secciones primero
+  sections.forEach(s => {
+    document.getElementById('sec-'+s).style.display = 'none';
+  });
+  // Mostramos solo la sección pedida
   document.getElementById('sec-'+id).style.display = 'block';
+
+  // Actualizamos qué item del menú lateral está activo
   document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
-  document.querySelectorAll('.menu-item').forEach(m => { if(m.getAttribute('onclick') && m.getAttribute('onclick').includes("'"+id+"'")) m.classList.add('active'); });
+  document.querySelectorAll('.menu-item').forEach(m => {
+    if (m.getAttribute('onclick') && m.getAttribute('onclick').includes("'"+id+"'"))
+      m.classList.add('active');
+  });
+
+  /*
+   * NUEVO: Si el usuario abre "Mis Ofertas"
+   * cargamos las ofertas reales de la BD automáticamente.
+   * Es como encender la tele cuando entras a la sala —
+   * no tienes que hacer nada extra, solo entrar.
+   */
+  if (id === 'mis-ofertas') {
+    cargarMisOfertas();
+  }
 }
 
 // --- OFERTAS ---
@@ -747,14 +857,62 @@ function sendMsg() {
 // --- MODAL ---
 function showModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
-function selectCat(el) {
+function selectCat(el, valor) {
   document.querySelectorAll('.cat-option').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
+  document.getElementById('oferta_categoria').value = valor;
 }
-function submitOferta(e) {
+async function submitOferta(e) {
   e.preventDefault();
-  closeModal('modalOferta');
-  showToast('🎉 ¡Oferta publicada exitosamente!');
+
+  const btn = document.getElementById('btnPublicar');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  const titulo      = document.getElementById('oferta_titulo').value.trim();
+  const descripcion = document.getElementById('oferta_descripcion').value.trim();
+  const categoria   = document.getElementById('oferta_categoria').value;
+  const ciudad      = document.getElementById('oferta_ciudad').value;
+  const valor       = document.getElementById('oferta_valor').value || 0;
+
+  const datos = new FormData();
+  datos.append('titulo',         titulo);
+  datos.append('descripcion',    descripcion);
+  datos.append('categoria',      categoria);
+  datos.append('ciudad',         ciudad);
+  datos.append('valor_estimado', valor);
+
+  try {
+    const respuesta = await fetch('guardar_oferta.php', {
+      method: 'POST',
+      body: datos
+    });
+    const resultado = await respuesta.json();
+
+    if (resultado.ok) {
+      closeModal('modalOferta');
+      document.getElementById('formNuevaOferta').reset();
+      document.querySelectorAll('.cat-option').forEach((c, i) => {
+        c.classList.toggle('selected', i === 0);
+      });
+      document.getElementById('oferta_categoria').value = 'producto';
+      showToast('🎉 ¡Oferta #' + resultado.id + ' publicada!');
+      const statCards = document.querySelectorAll('.stat-card-num');
+      if (statCards[0]) {
+        statCards[0].textContent = parseInt(statCards[0].textContent) + 1;
+      }
+    } else {
+      showToast('❌ ' + resultado.mensaje);
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('❌ Error de conexión. Revisa que XAMPP esté encendido.');
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'PUBLICAR OFERTA';
+  }
 }
 
 // --- TOAST ---
@@ -766,7 +924,72 @@ function showToast(msg) {
   tc.appendChild(t);
   setTimeout(() => t.remove(), 3500);
 }
+// =============================================
+// MIS OFERTAS — Carga datos reales desde la BD
+// =============================================
+let todasMisOfertas = [];
 
+async function cargarMisOfertas() {
+  try {
+    const respuesta = await fetch('mis_ofertas_ajax.php');
+    const datos = await respuesta.json();
+    todasMisOfertas = datos;
+    document.getElementById('misOfertasTotal').textContent = datos.length;
+    renderMisOfertas(todasMisOfertas);
+  } catch (error) {
+    console.error('Error:', error);
+    document.getElementById('misOfertasGrid').innerHTML =
+      '<div style="color:var(--rojo-tm); padding:20px;">❌ Error al cargar. ¿XAMPP encendido?</div>';
+  }
+}
+
+function renderMisOfertas(lista) {
+  const grid = document.getElementById('misOfertasGrid');
+  if (lista.length === 0) {
+    grid.innerHTML =
+      '<div style="text-align:center; padding:40px; color:var(--gris-medio);">' +
+      '<div style="font-size:48px; margin-bottom:16px;">📦</div>' +
+      '<div style="font-size:16px;">Aún no tienes ofertas publicadas</div>' +
+      '</div>';
+    return;
+  }
+  const iconos    = { producto:'📦', servicio:'🛠️', conocimiento:'📚', experiencia:'🎭' };
+  const badges    = { producto:'badge-red', servicio:'badge-blue', conocimiento:'badge-green', experiencia:'badge-yellow' };
+  const etiquetas = { producto:'Producto', servicio:'Servicio', conocimiento:'Conocimiento', experiencia:'Experiencia' };
+  const estadoColor = { activa:'badge-green', inactiva:'', intercambiada:'badge-blue' };
+  const estadoLabel = { activa:'✅ Activa', inactiva:'⏸️ Inactiva', intercambiada:'🔄 Intercambiada' };
+
+  grid.innerHTML = lista.map(function(o) {
+    return '<div class="oc">' +
+      '<div class="oc-img">' + (iconos[o.categoria] || '📦') +
+      '<span class="badge ' + (badges[o.categoria] || '') + '" style="position:absolute;top:10px;left:10px;">' + (etiquetas[o.categoria] || o.categoria) + '</span>' +
+      '<span class="badge ' + (estadoColor[o.estado] || '') + '" style="position:absolute;top:10px;right:10px;font-size:10px;">' + (estadoLabel[o.estado] || o.estado) + '</span>' +
+      '</div>' +
+      '<div class="oc-body">' +
+      '<div class="oc-title">' + o.titulo + '</div>' +
+      '<div class="oc-meta"><i class="fa fa-map-marker-alt"></i> ' + o.ciudad + ' &nbsp;·&nbsp; ' +
+      (o.valor_estimado > 0 ? '$ ' + parseInt(o.valor_estimado).toLocaleString('es-CO') : 'Valor a convenir') +
+      '</div></div>' +
+      '<div class="oc-footer">' +
+      '<button class="btn btn-ghost btn-sm" onclick="showToast(\'✏️ Pronto podrás editar\')"><i class="fa fa-edit"></i> Editar</button>' +
+      '<button class="btn btn-secondary btn-sm" onclick="confirmarEliminar(' + o.id_oferta + ', \'' + o.titulo.replace(/'/g, "\\'") + '\')"><i class="fa fa-trash"></i> Eliminar</button>' +
+      '</div></div>';
+  }).join('');
+}
+
+function filtrarMisOfertas(boton, estado) {
+  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+  boton.classList.add('active');
+  const filtradas = (estado === 'todos') ? todasMisOfertas : todasMisOfertas.filter(function(o) { return o.estado === estado; });
+  renderMisOfertas(filtradas);
+}
+
+function confirmarEliminar(id, titulo) {
+  if (confirm('¿Seguro que quieres eliminar "' + titulo + '"?\nEsta acción no se puede deshacer.')) {
+    showToast('🗑️ Oferta #' + id + ' eliminada');
+    cargarMisOfertas();
+  }
+}
 // --- LOGOUT ---
 function logout() {
   window.location.href = 'cerrar_sesion.php';
