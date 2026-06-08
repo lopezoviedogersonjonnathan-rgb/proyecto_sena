@@ -984,10 +984,43 @@ function filtrarMisOfertas(boton, estado) {
   renderMisOfertas(filtradas);
 }
 
-function confirmarEliminar(id, titulo) {
-  if (confirm('¿Seguro que quieres eliminar "' + titulo + '"?\nEsta acción no se puede deshacer.')) {
-    showToast('🗑️ Oferta #' + id + ' eliminada');
-    cargarMisOfertas();
+async function confirmarEliminar(id, titulo) {
+  // confirm() muestra un popup de confirmación
+  // Si el usuario cancela, no hacemos nada
+  if (!confirm('¿Seguro que quieres eliminar "' + titulo + '"?\nEsta acción no se puede deshacer.')) {
+    return; // El usuario canceló — salimos
+  }
+
+  try {
+    // FormData es como un sobre donde metemos los datos
+    // para enviarlos al servidor por POST
+    const datos = new FormData();
+    datos.append('id_oferta', id); // Metemos el ID al sobre
+
+    // fetch() manda el sobre a eliminar_oferta.php
+    // y espera la respuesta
+    const respuesta = await fetch('eliminar_oferta.php', {
+      method: 'POST',
+      body: datos
+    });
+
+    // .json() abre el sobre de respuesta y lee el contenido
+    const resultado = await respuesta.json();
+
+    if (resultado.ok) {
+      // Si funcionó mostramos toast de éxito
+      showToast('🗑️ Oferta eliminada correctamente');
+      // Recargamos la lista de mis ofertas
+      // para que desaparezca la tarjeta eliminada
+      cargarMisOfertas();
+    } else {
+      // Si algo salió mal mostramos el error
+      showToast('❌ ' + resultado.mensaje);
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('❌ Error de conexión');
   }
 }
 // --- LOGOUT ---
