@@ -1,5 +1,5 @@
 # 🤝 TRUEQUE MATCH
-### Plataforma colombiana de intercambio sin dinero
+### Plataforma Colombiana de Intercambio Sin Dinero
 
 **Estudiante:** Gerson Jonnathan López Oviedo  
 **Ficha:** 3186647  
@@ -10,21 +10,39 @@
 
 ---
 
-## 📋 Evidencias
+## 🌐 Descripción
+
+Trueque Match es una aplicación web que permite a los colombianos intercambiar productos, servicios, conocimientos y experiencias **sin necesidad de dinero**. Promueve la economía colaborativa conectando personas que tienen algo que ofrecer con quienes lo necesitan.
+
+---
+
+## 🚀 Stack Tecnológico
+
+| Capa | Tecnología | Estado |
+|------|-----------|--------|
+| Backend Web | PHP 8.2 + MariaDB | ✅ Funcional |
+| Frontend Web | HTML5 + CSS3 + JavaScript | ✅ Funcional |
+| Base de Datos | MariaDB via XAMPP puerto 3307 | ✅ Funcional |
+| App Móvil | React Native + Expo (Android) | ✅ APK en Redmi 9 |
+| Control versiones | Git + GitHub | ✅ Funcional |
+| IDE | Visual Studio Code | ✅ Configurado |
+
+---
+
+## 📋 Evidencias SENA
 
 | Evidencia | Descripción | Estado |
 |-----------|-------------|--------|
 | GA6-220501096-AA1-EV01 | Modelo Relacional + Normalización 1FN/2FN/3FN | ✅ |
 | GA6-220501096-AA1-EV02 | Modelo Entidad Relación MySQL Workbench | ✅ |
-| GA6-220501096-AA4-EV03 | Front-End HTML/CSS/JS + PHP + MariaDB | ✅ |
+| GA6-220501096-AA4-EV03 | Front-End HTML/CSS/JS + PHP + MariaDB + GitHub | ✅ |
 
 ---
 
 ## 🗄️ Base de Datos
 
-- **Motor:** MariaDB (XAMPP puerto 3307)
-- **BD:** `trueque_match_db`
-- **Tablas:** 10 tablas normalizadas (1FN, 2FN, 3FN)
+- **Motor:** MariaDB 10.x via XAMPP | **Puerto:** 3307
+- **BD:** `trueque_match_db` | **Tablas:** 10 normalizadas (1FN, 2FN, 3FN)
 
 | Tabla | Descripción |
 |-------|-------------|
@@ -41,4 +59,4 @@
 
 ---
 
-## 🚀 Estructura del Proyectos
+## 📁 Estructura del Proyectos
