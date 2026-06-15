@@ -59,7 +59,7 @@ Trueque Match es una aplicación web que permite a los colombianos intercambiar 
 
 ---
 
-## 📁 Estructura del Proyectos
+## 📁 Estructura del Proyecto
 
 ---
 
