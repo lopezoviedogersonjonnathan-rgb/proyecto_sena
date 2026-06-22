@@ -59,6 +59,7 @@ Trueque Match es una aplicación web que permite a los colombianos intercambiar 
 
 ---
 
+<<<<<<< Updated upstream
 ## 📁 Estructura del Proyecto
 
 ---
@@ -75,3 +76,6 @@ https://youtu.be/Kis8zE8BeT4?si=l61Aqz02DDFPFNM7
 
 **Descripción:**
 En este video se presenta la explicación y desarrollo de las evidencias GA7-220501096-AA3-EV01 y GA7-220501096-AA3-EV02 correspondientes al proyecto app TRUEQUE MATCH.
+=======
+## 📁 Estructura del Proyectoss
+>>>>>>> Stashed changes
