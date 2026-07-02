@@ -89,13 +89,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
 
             } else {
-                $mensaje  = "❌ Contraseña incorrecta.";
+                // Mensaje genérico — no revelamos si falló el correo o la contraseña
+                // Por seguridad, un atacante no debe saber cuál de los dos está mal
+                $mensaje  = "❌ Correo o contraseña incorrectos.";
                 $tipo_msg = "error";
             }
 
         } else {
-            $mensaje  = "❌ No existe una cuenta con ese correo.";
-            $tipo_msg = "error";
+            // Mismo mensaje genérico para ambos casos de error
+            // Si dijéramos "correo no existe" un atacante sabría que puede seguir probando contraseñas
+                $mensaje  = "❌ Correo o contraseña incorrectos.";
+                $tipo_msg = "error";
         }
     }
 }

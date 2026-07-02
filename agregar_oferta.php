@@ -63,9 +63,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // mysqli_query() ejecuta el INSERT
         if (mysqli_query($conexion, $sql)) {
             // mysqli_insert_id() devuelve el ID del registro recién creado
-            $nuevo_id = mysqli_insert_id($conexion);
-            $mensaje = "✅ ¡Oferta creada exitosamente! ID asignado: #$nuevo_id";
-            $tipo_mensaje = "exito";
+            // mysqli_insert_id() guarda el ID del registro recién creado
+        $nuevo_id = mysqli_insert_id($conexion);
+
+         // header() redirige al usuario a ofertas.php
+         // ?mensaje=creada es como pasarle una nota a la siguiente página
+         // diciéndole "oye, acaban de crear una oferta nueva"
+        header("Location: ofertas.php?mensaje=creada");
+
+         // exit() para el código aquí — sin esto PHP seguiría
+         // ejecutando código aunque el usuario ya fue redirigido
+         // Es como apagar la luz al salir de un cuarto
+        exit();
         } else {
             // mysqli_error() devuelve el error de MySQL si algo falló
             $mensaje = "❌ Error al guardar: " . mysqli_error($conexion);
