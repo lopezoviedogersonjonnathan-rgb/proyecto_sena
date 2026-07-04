@@ -59,8 +59,28 @@ Trueque Match es una aplicación web que permite a los colombianos intercambiar 
 
 ---
 
-<<<<<<< Updated upstream
 ## 📁 Estructura del Proyecto
+
+proyecto_sena/
+├── README.md
+├── conexion.php
+├── agregar_oferta.php
+├── ofertas.php
+├── editar_oferta.php
+├── trueque_match_db.sql
+└── app_trueque_match/
+    ├── index.html
+    ├── login.html / login.php
+    ├── registro.html / registro.php
+    ├── dashboard.php
+    ├── mis_ofertas_ajax.php
+    ├── guardar_oferta.php
+    ├── eliminar_oferta.php
+    ├── cerrar_sesion.php
+    ├── como-funciona.html
+    ├── styles.css
+    ├── app.js
+    └── LOGO_FINAL.png
 
 ---
 
@@ -76,6 +96,3 @@ https://youtu.be/Kis8zE8BeT4?si=l61Aqz02DDFPFNM7
 
 **Descripción:**
 En este video se presenta la explicación y desarrollo de las evidencias GA7-220501096-AA3-EV01 y GA7-220501096-AA3-EV02 correspondientes al proyecto app TRUEQUE MATCH.
-=======
-## 📁 Estructura del Proyectoss
->>>>>>> Stashed changes
