@@ -1,168 +1,232 @@
 <?php
 // ============================================================
-// api_registro.php — API de Registro para Trueque Match
-// Pensada para que la app móvil (React Native) pueda crear
-// cuentas nuevas sin depender del formulario web con sesiones
+// api_solicitudes.php — API de Solicitudes para Trueque Match
+// Evidencia de corrección — julio 2026
 // Gerson Jonnathan López Oviedo | Ficha: 3186647
 // ============================================================
-// Sigue exactamente las mismas reglas que registro.php, para
-// que un usuario registrado desde la app móvil quede igual
-// de válido que uno registrado desde la web
+// Una "solicitud" es el paso PREVIO a un trueque: alguien ve
+// una oferta que le interesa y le manda un mensaje al dueño
+// preguntando si quiere intercambiar. El dueño puede aceptar
+// o rechazar esa solicitud.
+//
+// Este archivo reemplaza la versión anterior que, por error,
+// tenía código de registro de usuarios copiado y pegado.
 // ============================================================
 
 // Avisamos que la respuesta va a ser JSON
 header("Content-Type: application/json");
 
-// Permitimos que la app móvil (o Postman) se conecte sin
-// que el navegador lo bloquee por seguridad (CORS)
+// Permitimos que Postman o la app móvil se conecten sin que
+// el navegador lo bloquee por seguridad (CORS)
 header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Traemos la conexión ya armada a MariaDB
 require_once "../conexion.php";
 
-// Esta API solo acepta POST, porque registrar un usuario
-// siempre es "crear algo nuevo"
+// Guardamos qué tipo de petición llegó (GET, POST, PUT o DELETE)
 $metodo = $_SERVER["REQUEST_METHOD"];
 
-if ($metodo !== "POST") {
-    // Si alguien intenta usar GET, PUT o DELETE aquí, le
-    // avisamos que este endpoint no lo permite
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "Este endpoint solo acepta peticiones POST"
-    ]);
-    exit();
-}
-
-// Recibimos los datos que manda Postman o la app móvil
-// trim() quita espacios de más al principio y al final
-$nombre   = trim($_POST["nombre"]   ?? "");
-$apellido = trim($_POST["apellido"] ?? "");
-$correo   = trim($_POST["correo"]   ?? "");
-$ciudad   = $_POST["ciudad"] ?? "Bogotá";
-$pass1    = $_POST["pass1"]  ?? "";
-$pass2    = $_POST["pass2"]  ?? "";
-
-// isset() revisa si "terminos" llegó en la petición
-// (en la app móvil puede venir como texto "true" o "1")
-$terminos = isset($_POST["terminos"]) && $_POST["terminos"] !== "false" && $_POST["terminos"] !== "0";
-
-// Unimos nombre y apellido en un solo campo, igual que
-// se hace en registro.php
-$nombre_completo = $nombre . " " . $apellido;
-
 // ============================================================
-// VALIDACIONES — las mismas que ya usa registro.php
+// GET — Listar solicitudes
 // ============================================================
+// Sirve para ver, por ejemplo, todas las solicitudes que le
+// han llegado a un usuario (las que tiene que responder)
+if ($metodo === "GET") {
 
-// 1. Revisamos que los campos obligatorios sí llegaron
-if (empty($nombre) || empty($apellido) || empty($correo) || empty($pass1)) {
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "Completa todos los campos obligatorios"
-    ]);
-    exit();
-}
+    // id_usuario_recibe es opcional: si llega, filtramos
+    // solo las solicitudes de ESE usuario. Si no llega,
+    // mostramos todas (útil para pruebas en Postman)
+    $id_usuario_recibe = $_GET["id_usuario_recibe"] ?? "";
 
-// 2. filter_var con FILTER_VALIDATE_EMAIL revisa que el
-// correo tenga formato de correo real (algo@algo.com)
-if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "El correo electronico no es valido"
-    ]);
-    exit();
-}
+    if (!empty($id_usuario_recibe)) {
+        $sql = "SELECT s.id_solicitud, s.mensaje, s.estado, s.fecha_solicitud, 
+                       s.fecha_respuesta, s.id_usuario_solicita, s.id_usuario_recibe, s.id_oferta,
+                       o.titulo AS titulo_oferta
+                FROM solicitud s
+                INNER JOIN oferta o ON s.id_oferta = o.id_oferta
+                WHERE s.id_usuario_recibe = $id_usuario_recibe
+                ORDER BY s.fecha_solicitud DESC";
+    } else {
+        $sql = "SELECT s.id_solicitud, s.mensaje, s.estado, s.fecha_solicitud, 
+                       s.fecha_respuesta, s.id_usuario_solicita, s.id_usuario_recibe, s.id_oferta,
+                       o.titulo AS titulo_oferta
+                FROM solicitud s
+                INNER JOIN oferta o ON s.id_oferta = o.id_oferta
+                ORDER BY s.fecha_solicitud DESC";
+    }
 
-// 3. strlen() cuenta los caracteres de la contraseña
-if (strlen($pass1) < 8) {
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "La contrasena debe tener minimo 8 caracteres"
-    ]);
-    exit();
-}
+    $resultado = mysqli_query($conexion, $sql);
+    $solicitudes = [];
 
-// 4. Las dos contraseñas deben ser exactamente iguales
-if ($pass1 !== $pass2) {
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "Las contrasenas no coinciden"
-    ]);
-    exit();
-}
-
-// 5. El usuario debe aceptar los terminos y condiciones
-if (!$terminos) {
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "Debes aceptar los terminos y condiciones"
-    ]);
-    exit();
-}
-
-// ============================================================
-// Si pasó todas las validaciones, seguimos con el registro
-// ============================================================
-
-// mysqli_real_escape_string() limpia los datos para evitar
-// que alguien intente meter código SQL malicioso
-$nombre_completo = mysqli_real_escape_string($conexion, $nombre_completo);
-$correo          = mysqli_real_escape_string($conexion, $correo);
-$ciudad          = mysqli_real_escape_string($conexion, $ciudad);
-
-// password_hash() cifra la contraseña con bcrypt
-// Nunca se guarda una contraseña en texto plano
-$clave_cifrada = password_hash($pass1, PASSWORD_DEFAULT);
-
-// Revisamos si ya existe una cuenta con ese correo,
-// para no crear usuarios duplicados
-$check = mysqli_query($conexion,
-    "SELECT id_usuario FROM USUARIO WHERE correo = '$correo'"
-);
-
-if (mysqli_num_rows($check) > 0) {
-    // mysqli_num_rows() cuenta cuántas filas encontró
-    // Si encontró al menos 1, ese correo ya está registrado
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "Ya existe una cuenta con ese correo electronico"
-    ]);
-    exit();
-}
-
-// Armamos el INSERT del nuevo usuario
-// id_tipo_usuario = 1 significa usuario estandar (no admin)
-$sql = "INSERT INTO USUARIO
-            (nombre, correo, clave_acceso, ciudad, id_tipo_usuario)
-        VALUES
-            ('$nombre_completo', '$correo', '$clave_cifrada', '$ciudad', 1)";
-
-if (mysqli_query($conexion, $sql)) {
-
-    // mysqli_insert_id() nos da el ID que la base de datos
-    // le asignó automáticamente al nuevo usuario
-    $nuevo_id = mysqli_insert_id($conexion);
+    while ($fila = mysqli_fetch_assoc($resultado)) {
+        $solicitudes[] = $fila;
+    }
 
     echo json_encode([
         "status" => "success",
-        "mensaje" => "Cuenta creada exitosamente",
-        "id_usuario_creado" => $nuevo_id,
-        "data" => [
-            "nombre" => $nombre_completo,
-            "correo" => $correo,
-            "ciudad" => $ciudad
-        ]
-    ]);
-} else {
-    // Si algo falló, mysqli_error() nos dice el motivo exacto
-    echo json_encode([
-        "status" => "error",
-        "mensaje" => "Error al crear la cuenta: " . mysqli_error($conexion)
+        "mensaje" => "Solicitudes obtenidas correctamente",
+        "total" => count($solicitudes),
+        "data" => $solicitudes
     ]);
 }
 
-mysqli_close($conexion);
+// ============================================================
+// POST — Crear una solicitud nueva (contactar por una oferta)
+// ============================================================
+elseif ($metodo === "POST") {
+
+    $mensaje             = $_POST["mensaje"]             ?? "";
+    $id_usuario_solicita = $_POST["id_usuario_solicita"]  ?? "";
+    $id_usuario_recibe   = $_POST["id_usuario_recibe"]    ?? "";
+    $id_oferta           = $_POST["id_oferta"]            ?? "";
+
+    // Validamos que lleguen los tres IDs, sin ellos no
+    // sabemos quién le escribe a quién ni sobre qué oferta
+    if (empty($id_usuario_solicita) || empty($id_usuario_recibe) || empty($id_oferta)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "id_usuario_solicita, id_usuario_recibe e id_oferta son obligatorios"
+        ]);
+        exit();
+    }
+
+    // Un usuario no debería poder mandarse una solicitud a
+    // sí mismo, así que lo bloqueamos
+    if ($id_usuario_solicita == $id_usuario_recibe) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "No puedes enviarte una solicitud a ti mismo"
+        ]);
+        exit();
+    }
+
+    // Limpiamos el mensaje para evitar código SQL malicioso
+    $mensaje = mysqli_real_escape_string($conexion, $mensaje);
+
+    // El estado siempre nace en 'pendiente' — el dueño de la
+    // oferta es quien decide después si acepta o rechaza
+    $sql = "INSERT INTO solicitud (mensaje, estado, id_usuario_solicita, id_usuario_recibe, id_oferta)
+            VALUES ('$mensaje', 'pendiente', $id_usuario_solicita, $id_usuario_recibe, $id_oferta)";
+
+    if (mysqli_query($conexion, $sql)) {
+        $nuevo_id = mysqli_insert_id($conexion);
+
+        echo json_encode([
+            "status" => "success",
+            "mensaje" => "Solicitud enviada correctamente",
+            "id_solicitud_creada" => $nuevo_id,
+            "data" => [
+                "mensaje" => $mensaje,
+                "estado" => "pendiente",
+                "id_usuario_solicita" => $id_usuario_solicita,
+                "id_usuario_recibe" => $id_usuario_recibe,
+                "id_oferta" => $id_oferta
+            ]
+        ]);
+    } else {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "Error al crear la solicitud: " . mysqli_error($conexion)
+        ]);
+    }
+}
+
+// ============================================================
+// PUT — Responder una solicitud (aceptar o rechazar)
+// ============================================================
+elseif ($metodo === "PUT") {
+
+    // PUT no llena $_POST automáticamente, así que leemos
+    // el cuerpo de la petición a mano
+    parse_str(file_get_contents("php://input"), $datos);
+
+    $id_solicitud = $datos["id_solicitud"] ?? "";
+    $estado       = $datos["estado"]       ?? "";
+
+    if (empty($id_solicitud)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "El id_solicitud es obligatorio"
+        ]);
+        exit();
+    }
+
+    // Solo se permiten estos dos valores como respuesta.
+    // 'pendiente' no se pone aquí porque esa es la solicitud
+    // recién creada, no una respuesta
+    $estados_validos = ["aceptada", "rechazada"];
+
+    if (!in_array($estado, $estados_validos)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "El estado debe ser 'aceptada' o 'rechazada'"
+        ]);
+        exit();
+    }
+
+    // NOW() le pide a MySQL que ponga la fecha y hora actual
+    // en fecha_respuesta, para saber cuándo se respondió
+    $sql = "UPDATE solicitud 
+            SET estado = '$estado', fecha_respuesta = NOW()
+            WHERE id_solicitud = $id_solicitud";
+
+    if (mysqli_query($conexion, $sql)) {
+        echo json_encode([
+            "status" => "success",
+            "mensaje" => "Solicitud actualizada correctamente",
+            "id_solicitud_editada" => $id_solicitud,
+            "nuevo_estado" => $estado
+        ]);
+    } else {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "Error al actualizar la solicitud: " . mysqli_error($conexion)
+        ]);
+    }
+}
+
+// ============================================================
+// DELETE — Cancelar/eliminar una solicitud
+// ============================================================
+elseif ($metodo === "DELETE") {
+
+    parse_str(file_get_contents("php://input"), $datos);
+
+    $id_solicitud = $datos["id_solicitud"] ?? "";
+
+    if (empty($id_solicitud)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "El id_solicitud es obligatorio para eliminar"
+        ]);
+        exit();
+    }
+
+    $sql = "DELETE FROM solicitud WHERE id_solicitud = $id_solicitud";
+
+    if (mysqli_query($conexion, $sql)) {
+        echo json_encode([
+            "status" => "success",
+            "mensaje" => "Solicitud eliminada correctamente",
+            "id_solicitud_eliminada" => $id_solicitud
+        ]);
+    } else {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "Error al eliminar la solicitud: " . mysqli_error($conexion)
+        ]);
+    }
+}
+
+// ============================================================
+// Si llega cualquier otro método que no sea GET/POST/PUT/DELETE
+// ============================================================
+else {
+    echo json_encode([
+        "status" => "error",
+        "mensaje" => "Metodo no permitido"
+    ]);
+}
 ?>
