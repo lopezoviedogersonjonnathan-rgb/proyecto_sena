@@ -7,6 +7,11 @@
 // Este archivo es UNA sola API que responde distinto según el
 // método que le mande Postman (GET, POST, PUT o DELETE).
 // Es como un mesero que atiende diferente según lo que le pidas.
+//
+// ACTUALIZACIÓN (Contexto v12): el PUT y el DELETE se reforzaron
+// con las validaciones que antes vivían en api_editar_oferta.php
+// y api_eliminar_oferta.php (que ya se eliminaron del proyecto).
+// Ahora hay UN SOLO camino oficial para editar/eliminar ofertas.
 // ============================================================
 
 // header() le avisa al navegador/Postman que la respuesta
@@ -28,6 +33,11 @@ require_once "../conexion.php";
 // llegó: GET, POST, PUT o DELETE. Lo guardamos en una variable
 // para no escribir $_SERVER[...] cada vez
 $metodo = $_SERVER["REQUEST_METHOD"];
+
+// Lista de categorías permitidas en el proyecto.
+// La definimos aquí arriba porque la vamos a usar en el PUT
+// para validar, igual que se hacía en api_editar_oferta.php
+$categorias_validas = ['producto', 'servicio', 'conocimiento', 'experiencia'];
 
 // ============================================================
 // GET — Listar todas las ofertas (para verificar que existen)
@@ -87,10 +97,17 @@ elseif ($metodo === "POST") {
         exit(); // exit() detiene el script para no seguir ejecutando
     }
 
+    // Escapamos el texto antes de meterlo al SQL, para que un
+    // apóstrofe o comilla en el titulo/descripcion no rompa la
+    // consulta ni abra la puerta a inyección SQL
+    $titulo_seguro      = mysqli_real_escape_string($conexion, $titulo);
+    $descripcion_segura = mysqli_real_escape_string($conexion, $descripcion);
+    $ciudad_segura      = mysqli_real_escape_string($conexion, $ciudad);
+
     // Armamos el INSERT con los datos recibidos
     // 'activa' queda fijo porque toda oferta nueva nace activa
     $sql = "INSERT INTO oferta (titulo, descripcion, categoria, estado, ciudad, id_usuario) 
-            VALUES ('$titulo', '$descripcion', '$categoria', 'activa', '$ciudad', $id_usuario)";
+            VALUES ('$titulo_seguro', '$descripcion_segura', '$categoria', 'activa', '$ciudad_segura', $id_usuario)";
     
     // Ejecutamos el INSERT. Si mysqli_query devuelve true, funcionó
     if (mysqli_query($conexion, $sql)) {
@@ -121,6 +138,7 @@ elseif ($metodo === "POST") {
 
 // ============================================================
 // PUT — Editar una oferta existente
+// REFORZADO con la validación que traía api_editar_oferta.php
 // ============================================================
 elseif ($metodo === "PUT") {
 
@@ -131,27 +149,70 @@ elseif ($metodo === "PUT") {
     // parse_str() lo convierte en un arreglo, igual que $_POST
     parse_str(file_get_contents("php://input"), $datos);
     
-    // Sacamos cada dato del arreglo $datos que acabamos de crear
-    $id_oferta   = $datos["id_oferta"]   ?? "";
-    $titulo      = $datos["titulo"]      ?? "";
-    $descripcion = $datos["descripcion"] ?? "";
-    $categoria   = $datos["categoria"]   ?? ""; // <- agregado en esta corrección
-    $ciudad      = $datos["ciudad"]      ?? "";
+    // intval() convierte el id a número entero de forma segura.
+    // Si llegara texto raro o nada, intval devuelve 0 en vez de
+    // dejar pasar algo peligroso directo al SQL
+    $id_oferta      = intval($datos["id_oferta"] ?? 0);
+    $titulo         = trim($datos["titulo"]         ?? "");
+    $descripcion    = trim($datos["descripcion"]    ?? "");
+    $categoria      = trim($datos["categoria"]      ?? "");
+    $ciudad         = trim($datos["ciudad"]         ?? "");
+    $valor_estimado = floatval($datos["valor_estimado"] ?? 0);
 
-    // Validamos que llegó el ID, porque sin saber CUÁL oferta
-    // editar, no podemos hacer nada
-    if (empty($id_oferta)) {
+    // Validamos que llegó un ID válido, porque sin saber CUÁL
+    // oferta editar, no podemos hacer nada
+    if ($id_oferta <= 0) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "El id_oferta es obligatorio para editar"
+            "mensaje" => "El id_oferta es obligatorio y debe ser mayor a 0"
         ]);
         exit();
     }
 
+    // Validamos que los campos obligatorios de texto sí llegaron
+    if (empty($titulo) || empty($descripcion) || empty($categoria)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "Titulo, descripcion y categoria son obligatorios"
+        ]);
+        exit();
+    }
+
+    // Verificamos que la categoría sea una de las 4 permitidas
+    // en el proyecto. in_array() revisa si el valor está en la lista
+    if (!in_array($categoria, $categorias_validas)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "Categoria no valida"
+        ]);
+        exit();
+    }
+
+    // Verificamos que la oferta exista ANTES de intentar editarla.
+    // Así evitamos ejecutar un UPDATE que no cambia nada porque
+    // el ID no existe, y le damos un mensaje claro a quien prueba
+    $check = mysqli_query($conexion, "SELECT id_oferta FROM oferta WHERE id_oferta = $id_oferta");
+    if (mysqli_num_rows($check) === 0) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "La oferta no existe"
+        ]);
+        exit();
+    }
+
+    // Escapamos el texto contra inyección SQL antes de armar el UPDATE
+    $titulo_seguro      = mysqli_real_escape_string($conexion, $titulo);
+    $descripcion_segura = mysqli_real_escape_string($conexion, $descripcion);
+    $ciudad_segura      = mysqli_real_escape_string($conexion, $ciudad);
+
     // Armamos el UPDATE. WHERE id_oferta=$id_oferta es lo que
     // le dice a MySQL "solo cambia ESTA fila, ninguna otra"
     $sql = "UPDATE oferta 
-            SET titulo='$titulo', descripcion='$descripcion', categoria='$categoria', ciudad='$ciudad' 
+            SET titulo='$titulo_seguro', 
+                descripcion='$descripcion_segura', 
+                categoria='$categoria', 
+                ciudad='$ciudad_segura',
+                valor_estimado=$valor_estimado
             WHERE id_oferta=$id_oferta";
     
     // Ejecutamos el UPDATE
@@ -161,10 +222,11 @@ elseif ($metodo === "PUT") {
             "mensaje" => "Oferta actualizada correctamente",
             "id_oferta_editada" => $id_oferta,
             "datos_nuevos" => [
-                "titulo"      => $titulo,
-                "descripcion" => $descripcion,
-                "categoria"   => $categoria, // <- agregado en esta corrección
-                "ciudad"      => $ciudad
+                "titulo"         => $titulo,
+                "descripcion"    => $descripcion,
+                "categoria"      => $categoria,
+                "ciudad"         => $ciudad,
+                "valor_estimado" => $valor_estimado
             ]
         ]);
     } else {
@@ -177,6 +239,7 @@ elseif ($metodo === "PUT") {
 
 // ============================================================
 // DELETE — Eliminar una oferta por ID
+// REFORZADO con la validación que traía api_eliminar_oferta.php
 // ============================================================
 elseif ($metodo === "DELETE") {
 
@@ -184,26 +247,48 @@ elseif ($metodo === "DELETE") {
     // usamos el mismo truco de php://input que en el PUT
     parse_str(file_get_contents("php://input"), $datos);
     
-    $id_oferta = $datos["id_oferta"] ?? "";
+    // intval() protege contra IDs raros o maliciosos, igual
+    // que hacíamos en api_eliminar_oferta.php
+    $id_oferta = intval($datos["id_oferta"] ?? 0);
 
-    // Sin ID no sabemos qué oferta borrar, así que validamos
-    if (empty($id_oferta)) {
+    // Sin un ID válido no sabemos qué oferta borrar
+    if ($id_oferta <= 0) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "El id_oferta es obligatorio para eliminar"
+            "mensaje" => "El id_oferta es obligatorio y debe ser mayor a 0"
         ]);
         exit();
     }
 
-    // DELETE FROM borra la fila completa que tenga ese id_oferta
+    // Verificamos que la oferta exista antes de borrar. Así, si
+    // alguien manda un ID que ya no existe (por ejemplo, uno que
+    // ya se completó en un trueque), el mensaje es claro en vez
+    // de un DELETE silencioso que no borra nada
+    $check = mysqli_query($conexion, "SELECT id_oferta FROM oferta WHERE id_oferta = $id_oferta");
+    if (mysqli_num_rows($check) === 0) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "No existe una oferta con ese ID"
+        ]);
+        exit();
+    }
+
+    // DELETE FROM borra la fila completa que tenga ese id_oferta.
+    // El CASCADE definido en la base de datos se encarga de borrar
+    // automáticamente las solicitudes y favoritos relacionados
     $sql = "DELETE FROM oferta WHERE id_oferta=$id_oferta";
     
     // Ejecutamos el DELETE
     if (mysqli_query($conexion, $sql)) {
+        // mysqli_affected_rows() dice cuántas filas se borraron
+        // Si es 1, todo salió bien
+        $filas = mysqli_affected_rows($conexion);
+
         echo json_encode([
             "status" => "success",
             "mensaje" => "Oferta eliminada correctamente de Trueque Match",
-            "id_oferta_eliminada" => $id_oferta
+            "id_oferta_eliminada" => $id_oferta,
+            "filas_borradas" => $filas
         ]);
     } else {
         echo json_encode([
