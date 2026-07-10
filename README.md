@@ -12,7 +12,7 @@
 
 ## 🌐 Descripción
 
-Trueque Match es una aplicación web que permite a los colombianos intercambiar productos, servicios, conocimientos y experiencias **sin necesidad de dinero**. Promueve la economía colaborativa conectando personas que tienen algo que ofrecer con quienes lo necesitan.
+Trueque Match es una aplicación web y móvil que permite a los colombianos intercambiar productos, servicios, conocimientos y experiencias **sin necesidad de dinero**. Promueve la economía colaborativa conectando personas que tienen algo que ofrecer con quienes lo necesitan.
 
 ---
 
@@ -24,7 +24,8 @@ Trueque Match es una aplicación web que permite a los colombianos intercambiar 
 | Frontend Web | HTML5 + CSS3 + JavaScript | ✅ Funcional |
 | Base de Datos | MariaDB via XAMPP puerto 3307 | ✅ Funcional |
 | App Móvil | React Native + Expo (Android) | ✅ APK en Redmi 9 |
-| Control versiones | Git + GitHub | ✅ Funcional |
+| APIs REST | 11 endpoints PHP | ✅ Todas probadas en Postman con datos reales |
+| Control de versiones | Git + GitHub | ✅ Funcional |
 | IDE | Visual Studio Code | ✅ Configurado |
 
 ---
@@ -33,9 +34,16 @@ Trueque Match es una aplicación web que permite a los colombianos intercambiar 
 
 | Evidencia | Descripción | Estado |
 |-----------|-------------|--------|
+| GA4-220501095-AA1-EV02 | Modelo conceptual y lógico del proyecto | ✅ |
+| GA4-220501095-AA2-EV02 | Informe de entregables para el proyecto | ✅ |
 | GA6-220501096-AA1-EV01 | Modelo Relacional + Normalización 1FN/2FN/3FN | ✅ |
-| GA6-220501096-AA1-EV02 | Modelo Entidad Relación MySQL Workbench | ✅ |
+| GA6-220501096-AA1-EV02 | Modelo Entidad Relación (MySQL Workbench) | ✅ |
+| GA6-220501096-AA1-EV03 y EV04 | Creación y elaboración de base de datos NoSQL (MongoDB) | ✅ |
+| GA6-220501096-AA2-EV01 | Informe técnico: sentencias DDL y DML de SQL | ✅ |
 | GA6-220501096-AA4-EV03 | Front-End HTML/CSS/JS + PHP + MariaDB + GitHub | ✅ |
+| GA7-220501096-AA4-EV02 y EV03 | Componentes Front-End | ✅ |
+| GA7-220501096-AA3-EV01 y EV02 | Video de sustentación | ✅ |
+| GA7-220501096-AA5-EV02, EV03 y EV04 | APIs REST probadas en Postman (video) | ✅ |
 
 ---
 
@@ -59,8 +67,27 @@ Trueque Match es una aplicación web que permite a los colombianos intercambiar 
 
 ---
 
+## 🔌 APIs REST (11 endpoints — todas probadas en Postman)
+
+| API | Recurso que maneja |
+|-----|--------------------|
+| `api_login.php` | Autenticación de usuarios |
+| `api_registro.php` | Registro de usuarios nuevos |
+| `api_ofertas.php` | Ofertas: crear (POST), listar (GET), editar (PUT), eliminar (DELETE) |
+| `api_solicitudes.php` | Solicitudes de contacto previo al trueque |
+| `api_trueques.php` | Trueques formalizados |
+| `api_evaluaciones.php` | Evaluaciones y reputación de usuarios |
+| `api_favoritos.php` | Ofertas favoritas de cada usuario |
+| `api_notificaciones.php` | Notificaciones del sistema |
+| `api_reportes.php` | Reportes/denuncias de usuarios |
+
+> Nota: `api_ofertas.php` es el único endpoint oficial para editar y eliminar ofertas (PUT/DELETE). Los antiguos `api_editar_oferta.php` y `api_eliminar_oferta.php` fueron retirados para evitar duplicidad de código.
+
+---
+
 ## 📁 Estructura del Proyecto
 
+```
 proyecto_sena/
 ├── README.md
 ├── conexion.php
@@ -70,29 +97,44 @@ proyecto_sena/
 ├── trueque_match_db.sql
 └── app_trueque_match/
     ├── index.html
-    ├── login.html / login.php
-    ├── registro.html / registro.php
+    ├── login.php
+    ├── registro.php
     ├── dashboard.php
     ├── mis_ofertas_ajax.php
     ├── guardar_oferta.php
     ├── eliminar_oferta.php
     ├── cerrar_sesion.php
     ├── como-funciona.html
+    ├── api_login.php
+    ├── api_registro.php
+    ├── api_ofertas.php
+    ├── api_solicitudes.php
+    ├── api_trueques.php
+    ├── api_evaluaciones.php
+    ├── api_favoritos.php
+    ├── api_notificaciones.php
+    ├── api_reportes.php
     ├── styles.css
     ├── app.js
     └── LOGO_FINAL.png
+```
 
 ---
 
-## 🎥 Video de Evidencias GA7
+## 🎥 Videos de Evidencias
 
-**Evidencias:**
-- GA7-220501096-AA3-EV01
-- GA7-220501096-AA3-EV02
+### GA7-AA3-EV01 y EV02 — Video de sustentación
 
-📹 **Video de sustentación (YouTube - No listado):**
+📹 https://youtu.be/Kis8zE8BeT4?si=l61Aqz02DDFPFNM7
 
-https://youtu.be/Kis8zE8BeT4?si=l61Aqz02DDFPFNM7
-
-**Descripción:**
 En este video se presenta la explicación y desarrollo de las evidencias GA7-220501096-AA3-EV01 y GA7-220501096-AA3-EV02 correspondientes al proyecto app TRUEQUE MATCH.
+
+### GA7-AA5-EV02, EV03 y EV04 — Pruebas de APIs en Postman
+
+📹 *[Pendiente: pegar aquí el enlace del video de Postman]*
+
+---
+
+## 📌 Estado del proyecto
+
+Las 11 APIs REST están confirmadas funcionando tanto por revisión de código como por ejecución real en Postman con datos reales. El proyecto sigue en fase de pulido de detalles menores (manual de usuario, exportación de diagramas EER en HD) antes de la recopilación final de evidencias.
