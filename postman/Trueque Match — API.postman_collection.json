@@ -1,0 +1,1193 @@
+{
+  "info": {
+    "_postman_id": "ac81aee4-05d7-4a03-80bb-fdff0861eef9",
+    "name": "Trueque Match — API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "56379325",
+    "_collection_link": "https://go.postman.co/collection/56379325-ac81aee4-05d7-4a03-80bb-fdff0861eef9?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "item": [
+        {
+          "name": "POST - Login",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "correo",
+                  "value": "gerson@trueque.com",
+                  "type": "text",
+                  "uuid": "cb7eea62-fef1-4b58-bf47-734b73839a89"
+                },
+                {
+                  "key": "clave_acceso",
+                  "value": "Gerson2026",
+                  "type": "text",
+                  "uuid": "de0a3ae4-6302-4a16-9c44-43658e168574"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_login.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_login.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Registro",
+      "item": [
+        {
+          "name": "POST - Registro",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "nombre",
+                  "value": "Usuario Prueba Postman",
+                  "type": "text",
+                  "uuid": "f43eeed6-6bb6-46cd-9626-5f23ef468a2a"
+                },
+                {
+                  "key": "correo",
+                  "value": "prueba.postman.1447@trueque.com",
+                  "type": "text",
+                  "uuid": "1b52841f-9b85-410e-8b4a-07ec0e37a63d"
+                },
+                {
+                  "key": "clave_acceso",
+                  "value": "Prueba2026",
+                  "type": "text",
+                  "uuid": "18516fd2-bb13-49cb-a345-3e7aae2f5206"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "Medellin",
+                  "type": "text",
+                  "uuid": "efad9685-8106-4b46-802f-3767d52a28df"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_registro.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_registro.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Ofertas",
+      "item": [
+        {
+          "name": "GET - Listar ofertas",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Eliminar oferta",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_oferta",
+                  "value": "48",
+                  "type": "text",
+                  "uuid": "13f790a0-5408-42bb-abdd-4e9c360987e7"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear oferta",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "titulo",
+                  "value": "Guitarra clásica de prueba Postman",
+                  "type": "text",
+                  "uuid": "26c61eb4-029e-4714-9a34-a9b24891a344"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Oferta creada para probar el ciclo completo CRUD",
+                  "type": "text",
+                  "uuid": "5b381188-4aa8-4ac1-a94a-4810afc7b2cf"
+                },
+                {
+                  "key": "categoria",
+                  "value": "producto",
+                  "type": "text",
+                  "uuid": "0919d06e-c851-49a7-ad71-310bf5955ea9"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "Bogotá",
+                  "type": "text",
+                  "uuid": "6666930c-b4f0-4c57-82e6-f620f12966cf"
+                },
+                {
+                  "key": "id_usuario",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "bf9685e9-f8c7-481d-af9e-2d36402fedc7"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Editar oferta",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_oferta",
+                  "value": "{{id_oferta_prueba}}",
+                  "type": "text",
+                  "uuid": "c9b4bdff-0613-4fa1-a954-94fef48418ab"
+                },
+                {
+                  "key": "titulo",
+                  "value": "Guitarra clásica editada por Postman",
+                  "type": "text",
+                  "uuid": "d320d7e6-df92-49bb-9d96-99591ffc124f"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Descripción actualizada para probar el PUT",
+                  "type": "text",
+                  "uuid": "eb990835-5802-46de-b838-ee364163855a"
+                },
+                {
+                  "key": "categoria",
+                  "value": "producto",
+                  "type": "text",
+                  "uuid": "e2eba7b8-b838-4ddf-93a3-b52270cebf5a"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "Medellín",
+                  "type": "text",
+                  "uuid": "41ae34e6-e1dd-40b5-be19-b943baf4bce7"
+                },
+                {
+                  "key": "valor_estimado",
+                  "value": "180000",
+                  "type": "text",
+                  "uuid": "46a102a3-2a2a-4f2f-87be-8f09bea67906"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear oferta trueque A",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "titulo",
+                  "value": "Guitarra de prueba para trueque",
+                  "type": "text",
+                  "uuid": "29b02a04-897d-411e-95c1-d9f111862d39"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Oferta desechable, solo para probar el trueque",
+                  "type": "text",
+                  "uuid": "ffaa402b-84ae-49b1-8763-188e485783ed"
+                },
+                {
+                  "key": "categoria",
+                  "value": "producto",
+                  "type": "text",
+                  "uuid": "1a2fe20a-13e7-4d08-8174-0f4b084e6d0d"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "Bogotá",
+                  "type": "text",
+                  "uuid": "cd791f10-45c8-4246-b37f-3fbdae6e047a"
+                },
+                {
+                  "key": "id_usaurio",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "ed9b5c48-4477-41b3-bc7e-fda1c0bfb253"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear oferta trueque B",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "titulo",
+                  "value": "\tBicicleta de prueba para trueque",
+                  "type": "text",
+                  "uuid": "056e2ecb-6aed-4cb8-b6b8-949a7e5be7b5"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Oferta desechable, solo para probar el trueque",
+                  "type": "text",
+                  "uuid": "2e98cbd8-ce7c-4909-b7eb-5cdda0e4877e"
+                },
+                {
+                  "key": "categoria",
+                  "value": "producto",
+                  "type": "text",
+                  "uuid": "3f35d5eb-797e-4118-a004-32e44a0b76f9"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "\tBogotá",
+                  "type": "text",
+                  "uuid": "69b39033-5aa9-4e4d-879c-50326a3194bd"
+                },
+                {
+                  "key": "id_usuario",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "322a6d70-5158-4aa7-8cbe-4f0b1025bb8d"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear oferta para evaluacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "titulo",
+                  "value": "Oferta desechable para evaluacion",
+                  "type": "text",
+                  "uuid": "390455d5-ff74-4d12-ac3d-5bb9deff8d4c"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Solo para generar un trueque de prueba",
+                  "type": "text",
+                  "uuid": "5653adb7-21ec-4acb-9482-27e3c222b4fd"
+                },
+                {
+                  "key": "categoria",
+                  "value": "producto",
+                  "type": "text",
+                  "uuid": "f835bd79-a46a-42f0-8a5e-2372b27c14c1"
+                },
+                {
+                  "key": "ciudad",
+                  "value": "Bogotá",
+                  "type": "text",
+                  "uuid": "f81c2dd3-1a87-43f7-b56e-8ed857aa7f4e"
+                },
+                {
+                  "key": "id_usuario",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "92e99eb4-ea15-4d20-b6c7-d0a54169d494"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_ofertas.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_ofertas.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear trueque para evaluacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_usuario_propone",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "342f2d22-4fc3-47d7-b67c-8277a21f7942"
+                },
+                {
+                  "key": "id_oferta_propone",
+                  "value": "{{id_oferta_eval}}",
+                  "type": "text",
+                  "uuid": "ce4807f2-348d-410f-8a3e-8cad0a0c2187"
+                },
+                {
+                  "key": "id_usuario_recibe",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "0b56d33c-29a9-433e-9044-3bc2b9b0af6a"
+                },
+                {
+                  "key": "id_oferta_recibe",
+                  "value": "26",
+                  "type": "text",
+                  "uuid": "3ceaee93-846f-41fa-a803-d8b3b2461ba9"
+                },
+                {
+                  "key": "descripcion_acuerdo",
+                  "value": "Trueque de prueba solo para evaluacion",
+                  "type": "text",
+                  "uuid": "17f18323-3164-4c53-95a1-e7cdcb312156"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_trueques.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_trueques.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Solicitudes",
+      "item": [
+        {
+          "name": "POST - Crear solicitud",
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "mensaje",
+                  "value": "Hola, me interesa tu curso de guitarra, ¿lo cambiarías por algo?",
+                  "type": "text",
+                  "uuid": "d9af59c0-0e51-4768-8113-91dd13e32a78"
+                },
+                {
+                  "key": "id_usuario_solicita",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "d497e481-8e6b-45be-bcee-3abec3976183"
+                },
+                {
+                  "key": "id_usuario_recibe",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "3d0a1a59-44f3-4b37-acfb-08224689ef3d"
+                },
+                {
+                  "key": "id_oferta",
+                  "value": "21",
+                  "type": "text",
+                  "uuid": "73c041f1-0ee7-4194-8cd4-ac3faac7946a"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_solicitudes.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_solicitudes.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Responder solicitud",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_solicitud",
+                  "value": "{{id_solicitud_prueba}}",
+                  "type": "text",
+                  "uuid": "a730130e-1d15-454f-8a9a-de96debeed92"
+                },
+                {
+                  "key": "estado",
+                  "value": "aceptada",
+                  "type": "text",
+                  "uuid": "86e7c608-b521-4d2d-9edd-d02646ba6ab6"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_solicitudes.php?id_solicitud={{id_solicitud_prueba}}&estado=\taceptada",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_solicitudes.php"
+              ],
+              "query": [
+                {
+                  "key": "id_solicitud",
+                  "value": "{{id_solicitud_prueba}}",
+                  "type": "text"
+                },
+                {
+                  "key": "estado",
+                  "value": "\taceptada",
+                  "type": "text"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Eliminar solicitud",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_solicitud",
+                  "value": "{{id_solicitud_prueba}}",
+                  "type": "text",
+                  "uuid": "f1728f4c-a919-4798-95d2-45c78d23671e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_solicitudes.php?id_solicitud=\t{{id_solicitud_prueba}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_solicitudes.php"
+              ],
+              "query": [
+                {
+                  "key": "id_solicitud",
+                  "value": "\t{{id_solicitud_prueba}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Trueques",
+      "item": [
+        {
+          "name": "POST - Crear trueque",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_usuario_propone",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "a4c55284-a753-4efe-9e12-f6f330fa4b88",
+                  "equals": true
+                },
+                {
+                  "key": "id_oferta_propone",
+                  "value": "{{id_oferta_trueque_a}}",
+                  "type": "text",
+                  "uuid": "8dbe835e-fda7-4fca-ab9e-af684fe8f1e4",
+                  "equals": true
+                },
+                {
+                  "key": "id_usuario_recibe",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "e544de5c-9f13-4f5b-95a9-2c10a6980101",
+                  "equals": true
+                },
+                {
+                  "key": "id_oferta_recibe",
+                  "value": "{{id_oferta_trueque_b}}",
+                  "type": "text",
+                  "uuid": "85d9d85d-ea9b-415b-adbf-da18bde37f7e",
+                  "equals": true
+                },
+                {
+                  "key": "descripcion_acuerdo",
+                  "value": "Prueba Postman: guitarra por bicicleta",
+                  "type": "text",
+                  "uuid": "c63c7dea-ca33-41c8-b6e0-7ef36be0502e",
+                  "equals": true
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_trueques.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_trueques.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET — Listar trueques",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "PUT — Aceptar el trueque",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "PUT — Completar el trueque",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_trueque",
+                  "value": "\t{{id_trueque_prueba}}",
+                  "type": "text",
+                  "uuid": "bce78b2d-9831-4e88-9f02-1feb64e76e89"
+                },
+                {
+                  "key": "estado",
+                  "value": "completado",
+                  "type": "text",
+                  "uuid": "cfdb92a9-eaf8-43c2-b456-a94ccb28f845"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_trueques.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_trueques.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Eliminar trueque",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_trueque",
+                  "value": "10",
+                  "type": "text",
+                  "uuid": "8c714b7c-4451-4763-84a9-7a73584596ba"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_trueques.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_trueques.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Evaluaciones",
+      "item": [
+        {
+          "name": "GET - Listar evaluaciones",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear evaluacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "puntaje",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "513601a8-c973-46ba-a502-a4f29ec6ae39"
+                },
+                {
+                  "key": "comentario",
+                  "value": "Excelente intercambio, todo perfecto",
+                  "type": "text",
+                  "uuid": "f2ab6569-4837-4b43-b638-08239b61d1ca"
+                },
+                {
+                  "key": "id_usuario",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "3b35ce09-bf8f-4954-8086-483a84e25a00"
+                },
+                {
+                  "key": "id_trueque",
+                  "value": "{{id_trueque_eval}}",
+                  "type": "text",
+                  "uuid": "998d2fa3-8aa5-44ab-a7c1-d39b85bb662a"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_evaluaciones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_evaluaciones.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Editar evaluacion",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_evaluacion",
+                  "value": "4",
+                  "type": "text",
+                  "uuid": "9561cc78-f88f-4029-b338-17510e751014"
+                },
+                {
+                  "key": "puntaje",
+                  "value": "3",
+                  "type": "text",
+                  "uuid": "35142031-290b-442d-8a31-c43cce8b6a7c"
+                },
+                {
+                  "key": "comentario",
+                  "value": "Tardó en responder, pero cumplió al final",
+                  "type": "text",
+                  "uuid": "2a4edd69-de50-41f0-8079-db22757be8d3"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_evaluaciones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_evaluaciones.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Eliminar evaluacion",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_evaluacion",
+                  "value": "{{id_evaluacion_prueba}}",
+                  "type": "text",
+                  "uuid": "c3475f01-a6ee-4a55-98bf-b53e8639cf76"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_evaluaciones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_evaluaciones.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Favoritos",
+      "item": [
+        {
+          "name": "GET - Listar favoritos",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Agregar favorito",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_usuario",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "ff0f1cee-5169-4467-bf89-645e88074e9c"
+                },
+                {
+                  "key": "id_oferta",
+                  "value": "21",
+                  "type": "text",
+                  "uuid": "35a02abd-96fa-482e-b3f4-f765672618f3"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_favoritos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_favoritos.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Quitar favorito",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_usuario",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "df85f586-6c34-44f4-a1e7-002a6f7e0687"
+                },
+                {
+                  "key": "id_oferta",
+                  "value": "21",
+                  "type": "text",
+                  "uuid": "c97a44d1-56d2-4c6a-9845-0db63f79b83b"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_favoritos.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_favoritos.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notificaciones",
+      "item": [
+        {
+          "name": "GET - Listar notificaciones",
+          "request": {
+            "method": "GET",
+            "header": []
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear notificacion",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "mensaje",
+                  "value": "Tienes una prueba de Postman pendiente de revisar",
+                  "type": "text",
+                  "uuid": "ddb7f72d-4012-45de-b48e-b68325e62102"
+                },
+                {
+                  "key": "tipo",
+                  "value": "info",
+                  "type": "text",
+                  "uuid": "6dadceb9-2682-4d6d-ae68-4212b68ebc90"
+                },
+                {
+                  "key": "id_usuario",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "76fc4144-d1b7-42b9-9276-6c1e48b61243"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_notificaciones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_notificaciones.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Marcar notificacion leida",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_notificacion",
+                  "value": "{{id_notificacion_prueba}}",
+                  "type": "text",
+                  "uuid": "f5a1b6ee-50df-4566-a086-cb97deaff03f"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_notificaciones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_notificaciones.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Eliminar notificacion",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_notificacion",
+                  "value": "{{id_notificacion_prueba}}",
+                  "type": "text",
+                  "uuid": "e6e94513-bbc4-4d36-8006-c396df856f85"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_notificaciones.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_notificaciones.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reportes",
+      "item": [
+        {
+          "name": "GET - Listar reportes",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api_reportes.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_reportes.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST - Crear reporte",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "motivo",
+                  "value": "otro",
+                  "type": "text",
+                  "uuid": "96d65395-12ec-4554-b761-9b21db64a7c4"
+                },
+                {
+                  "key": "descripcion",
+                  "value": "Reporte de prueba creado desde Postman",
+                  "type": "text",
+                  "uuid": "2edf8bd3-ff8a-48a5-b79e-717c2c97ea6d"
+                },
+                {
+                  "key": "id_usuario_reporta",
+                  "value": "{{id_usuario_prueba}}",
+                  "type": "text",
+                  "uuid": "7b8a715b-2f65-4d38-b75d-020953ec5453"
+                },
+                {
+                  "key": "id_usuario_reportado",
+                  "value": "1",
+                  "type": "text",
+                  "uuid": "1eb5da56-d326-45ba-a827-b24e1c157e61"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_reportes.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_reportes.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT - Revisar reporte",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_reporte",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "ae75ad7e-7624-4e94-ad4a-c9011e16f601"
+                },
+                {
+                  "key": "estado",
+                  "value": "revisado",
+                  "type": "text",
+                  "uuid": "6c5406c0-85be-4f6a-88cc-9f1afde2b8e2"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_reportes.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_reportes.php"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE - Eliminar reporte",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "key": "id_reporte",
+                  "value": "5",
+                  "type": "text",
+                  "uuid": "1b5064c0-6038-4265-870f-7f61cbee7b1e"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api_reportes.php",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api_reportes.php"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
