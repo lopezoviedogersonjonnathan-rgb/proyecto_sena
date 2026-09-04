@@ -27,4 +27,4 @@ Desktop.ini
 # ARCHIVOS DE CONFIGURACIÓN DEL EDITOR (VISUAL STUDIO CODE)
 # =======================================================================
 .vscode/
-*.code-workspace
+*.code-workspaceconexion_produccion*.php
