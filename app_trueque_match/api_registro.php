@@ -62,7 +62,7 @@ if (strlen($clave_acceso) < 8) {
 $correo_seguro = mysqli_real_escape_string($conexion, $correo);
 
 $check = mysqli_query($conexion,
-    "SELECT id_usuario FROM USUARIO WHERE correo = '$correo_seguro'"
+    "SELECT id_usuario FROM usuario WHERE correo = '$correo_seguro'"
 );
 
 if (mysqli_num_rows($check) > 0) {
@@ -85,7 +85,7 @@ $ciudad_segura = mysqli_real_escape_string($conexion, $ciudad);
 
 // ---- INSERTAR EN LA BD ----
 // id_tipo_usuario = 1 significa usuario estándar (no administrador)
-$sql = "INSERT INTO USUARIO (nombre, correo, clave_acceso, ciudad, id_tipo_usuario)
+$sql = "INSERT INTO usuario (nombre, correo, clave_acceso, ciudad, id_tipo_usuario)
         VALUES ('$nombre_seguro', '$correo_seguro', '$clave_cifrada', '$ciudad_segura', 1)";
 
 if (mysqli_query($conexion, $sql)) {

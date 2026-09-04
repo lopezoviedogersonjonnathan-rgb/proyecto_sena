@@ -55,7 +55,7 @@ if ($id_oferta <= 0) {
  * NO puede borrarla porque no es su usuario
  * Es como tener llave + huella dactilar 🔐
  */
-$sql = "DELETE FROM OFERTA 
+$sql = "DELETE FROM oferta 
         WHERE id_oferta = $id_oferta 
         AND id_usuario = $usuario_id";
 

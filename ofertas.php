@@ -101,8 +101,8 @@ include('conexion.php');
                 o.ciudad,
                 o.valor_estimado,
                 u.nombre AS nombre_usuario
-            FROM OFERTA o
-            JOIN USUARIO u ON o.id_usuario = u.id_usuario
+            FROM oferta o
+            JOIN usuario u ON o.id_usuario = u.id_usuario
             ORDER BY o.id_oferta ASC";
 
     // Ejecutamos la consulta y guardamos el resultado

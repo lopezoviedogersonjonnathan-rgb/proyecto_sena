@@ -36,7 +36,7 @@ $usuario_nombre = $_SESSION['usuario_nombre'];
 // WHERE filtra solo las ofertas de este usuario
 // =============================================
 $r_ofertas = mysqli_query($conexion,
-    "SELECT COUNT(*) AS total FROM OFERTA
+    "SELECT COUNT(*) AS total FROM oferta
      WHERE id_usuario = $usuario_id"
 );
 $total_ofertas = mysqli_fetch_assoc($r_ofertas)['total'];
@@ -47,7 +47,7 @@ $total_ofertas = mysqli_fetch_assoc($r_ofertas)['total'];
 // O donde el usuario recibe (por eso el OR)
 // =============================================
 $r_trueques = mysqli_query($conexion,
-    "SELECT COUNT(*) AS total FROM TRUEQUE
+    "SELECT COUNT(*) AS total FROM trueque
      WHERE id_usuario_propone = $usuario_id
      OR id_usuario_recibe = $usuario_id"
 );
@@ -60,8 +60,8 @@ $total_trueques = mysqli_fetch_assoc($r_trueques)['total'];
 // =============================================
 $r_rep = mysqli_query($conexion,
     "SELECT COALESCE(AVG(e.puntaje), 0) AS promedio
-     FROM EVALUACION e
-     JOIN TRUEQUE t ON e.id_trueque = t.id_trueque
+     FROM evaluacion e
+     JOIN trueque t ON e.id_trueque = t.id_trueque
      WHERE t.id_usuario_propone = $usuario_id
      OR t.id_usuario_recibe = $usuario_id"
 );
@@ -71,7 +71,7 @@ $reputacion = number_format(mysqli_fetch_assoc($r_rep)['promedio'], 1);
 // CONSULTA 4: Mis favoritos guardados
 // =============================================
 $r_favs = mysqli_query($conexion,
-    "SELECT COUNT(*) AS total FROM USUARIO_OFERTA
+    "SELECT COUNT(*) AS total FROM usuario_oferta
      WHERE id_usuario = $usuario_id"
 );
 $total_favs = mysqli_fetch_assoc($r_favs)['total'];
@@ -85,10 +85,10 @@ $r_pendientes = mysqli_query($conexion,
             o1.titulo AS oferta_propone,
             o2.titulo AS oferta_recibe,
             u.nombre  AS nombre_otro_usuario
-     FROM TRUEQUE t
-     JOIN OFERTA o1 ON t.id_oferta_propone = o1.id_oferta
-     JOIN OFERTA o2 ON t.id_oferta_recibe  = o2.id_oferta
-     JOIN USUARIO u ON (
+     FROM trueque t
+     JOIN oferta o1 ON t.id_oferta_propone = o1.id_oferta
+     JOIN oferta o2 ON t.id_oferta_recibe  = o2.id_oferta
+     JOIN usuario u ON (
          CASE
              WHEN t.id_usuario_propone = $usuario_id
              THEN t.id_usuario_recibe
@@ -105,7 +105,7 @@ $r_pendientes = mysqli_query($conexion,
 // CONSULTA 6: Notificaciones no leídas
 // =============================================
 $r_notifs = mysqli_query($conexion,
-    "SELECT COUNT(*) AS total FROM NOTIFICACION
+    "SELECT COUNT(*) AS total FROM notificacion
      WHERE id_usuario = $usuario_id AND leida = 0"
 );
 $notifs_sin_leer = mysqli_fetch_assoc($r_notifs)['total'];

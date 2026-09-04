@@ -21,7 +21,7 @@ $tipo_mensaje = "";
 if (isset($_GET['eliminar'])) {
     $id = (int)$_GET['eliminar']; // (int) convierte a número para seguridad
 
-    $sql = "DELETE FROM OFERTA WHERE id_oferta = $id";
+    $sql = "DELETE FROM oferta WHERE id_oferta = $id";
 
     if (mysqli_query($conexion, $sql)) {
         $mensaje = "✅ Oferta #$id eliminada correctamente.";
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
      * WHERE = condición para no actualizar TODOS los registros
      * (sin WHERE actualizaría TODA la tabla — muy peligroso)
      */
-    $sql = "UPDATE OFERTA SET
+    $sql = "UPDATE oferta SET
                 titulo         = '$titulo',
                 estado         = '$estado',
                 ciudad         = '$ciudad',
@@ -71,8 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['actualizar'])) {
  * Aquí el profe ve el CRUD completo en una sola página
  */
 $sql_listar = "SELECT o.*, u.nombre AS nombre_usuario
-               FROM OFERTA o
-               JOIN USUARIO u ON o.id_usuario = u.id_usuario
+               FROM oferta o
+               JOIN usuario u ON o.id_usuario = u.id_usuario
                ORDER BY o.id_oferta ASC";
 
 $ofertas = mysqli_query($conexion, $sql_listar);

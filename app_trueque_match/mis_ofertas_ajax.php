@@ -50,7 +50,7 @@ $sql = "SELECT
             ciudad,         -- Bogotá, Medellín, etc.
             valor_estimado, -- Cuánto vale en COP
             fecha_publicacion -- Cuándo fue publicada
-        FROM OFERTA
+        FROM oferta
         WHERE id_usuario = $usuario_id
         ORDER BY fecha_publicacion DESC";
 

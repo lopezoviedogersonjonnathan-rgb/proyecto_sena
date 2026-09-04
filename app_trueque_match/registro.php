@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          * para no crear usuarios duplicados
          */
         $check = mysqli_query($conexion,
-            "SELECT id_usuario FROM USUARIO WHERE correo = '$correo'"
+            "SELECT id_usuario FROM usuario WHERE correo = '$correo'"
         );
 
         if (mysqli_num_rows($check) > 0) {
@@ -85,11 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         } else {
             /*
-             * INSERT INTO USUARIO
+             * INSERT INTO usuario
              * id_tipo_usuario = 1 significa usuario estándar
              * La reputación empieza en 0.00 por defecto
              */
-            $sql = "INSERT INTO USUARIO
+            $sql = "INSERT INTO usuario
                         (nombre, correo, clave_acceso, ciudad, id_tipo_usuario)
                     VALUES
                         ('$nombre_completo', '$correo', '$clave_cifrada', '$ciudad', 1)";

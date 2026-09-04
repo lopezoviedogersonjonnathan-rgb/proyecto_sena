@@ -91,7 +91,7 @@ $categoria   = mysqli_real_escape_string($conexion, $categoria);
 // ---- INSERT EN LA BD ----
 // INSERT INTO = agregar un nuevo registro a la tabla OFERTA
 // Cada columna entre () corresponde a un valor en VALUES()
-$sql = "INSERT INTO OFERTA 
+$sql = "INSERT INTO oferta 
             (titulo, descripcion, categoria, ciudad, valor_estimado, id_usuario)
         VALUES 
             ('$titulo', '$descripcion', '$categoria', '$ciudad', $valor, $usuario_id)";

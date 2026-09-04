@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          * Solo traemos los campos que necesitamos
          */
         $sql = "SELECT id_usuario, nombre, correo, clave_acceso, ciudad, reputacion
-                FROM USUARIO
+                FROM usuario
                 WHERE correo = '$correo' AND activo = 1";
 
         $resultado = mysqli_query($conexion, $sql);

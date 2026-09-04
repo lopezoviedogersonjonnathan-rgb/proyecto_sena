@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
          * Las ? serían con prepared statements (avanzado)
          * Por ahora usamos escape_string para proteger
          */
-        $sql = "INSERT INTO OFERTA 
+        $sql = "INSERT INTO oferta 
                     (titulo, descripcion, categoria, ciudad, valor_estimado, id_usuario)
                 VALUES 
                     ('$titulo', '$descripcion', '$categoria', '$ciudad', '$valor_estimado', $id_usuario)";
