@@ -21,7 +21,7 @@ $tipo_msg = "";
  */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // Recogemos cada campo del formulario de registro.html
+    // Recogemos cada campo del formulario de registro.php
     // El name="" de cada input debe coincidir exactamente
     $nombre   = trim($_POST['nombre']);    // trim() quita espacios al inicio y al final
     $apellido = trim($_POST['apellido']);
@@ -192,7 +192,7 @@ mysqli_close($conexion);
                 <div style="font-size:32px; margin-bottom:8px;">🎉</div>
                 <strong style="display:block; font-size:16px;"><?= $mensaje ?></strong>
                 <p style="font-size:13px; margin-top:8px;">
-                    <a href="login.html" style="color:#27AE60;">← Ir a iniciar sesión</a>
+                    <a href="login.php" style="color:#27AE60;">← Ir a iniciar sesión</a>
                 </p>
             </div>
         <?php else: ?>
@@ -272,7 +272,7 @@ mysqli_close($conexion);
     </form>
 
     <div class="divider-text mt-md mb-md">o</div>
-    <a href="login.html" class="btn btn-secondary btn-full">
+    <a href="login.php" class="btn btn-secondary btn-full">
         Ya tengo cuenta — <strong>&nbsp;Ingresar</strong>
     </a>
 </div>
