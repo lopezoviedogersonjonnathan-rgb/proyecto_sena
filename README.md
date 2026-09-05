@@ -25,7 +25,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 | Backend Web | PHP 8.2 + MariaDB | ✅ Funcional |
 | Frontend Web | HTML5 + CSS3 + JavaScript | ✅ Funcional |
 | Base de Datos | MariaDB via XAMPP puerto 3307 | ✅ Funcional |
-| App Móvil | React Native + Expo (Android) | ✅ APK Probada en Redmi 9 (Gerson) y Redmi 10C (Sandra)
+| App Móvil | React Native + Expo (Android) | ✅ Probada en Redmi 9 (Gerson) y Redmi 10C (Sandra) |
 | APIs REST | 11 endpoints PHP | ✅ Todas probadas en Postman con datos reales |
 | Control de versiones | Git + GitHub | ✅ Funcional |
 | IDE | Visual Studio Code | ✅ Configurado |
@@ -90,8 +90,9 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 ---
 
 ## 📁 Estructura del Proyecto
-
-```proyecto_sena/
+```
+proyecto_sena/
+```
 ├── README.md
 ├── conexion.php
 ├── agregar_oferta.php
@@ -119,10 +120,10 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 ├── api_reportes.php
 ├── styles.css
 ├── app.js
-└── LOGO_FINAL.png```
+└── LOGO_FINAL.png
+```
 
 ---
-
 ## 🎥 Videos de Evidencias
 
 ### GA7-AA3-EV01 y EV02 — Video de sustentación
