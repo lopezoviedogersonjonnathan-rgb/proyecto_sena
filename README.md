@@ -90,3 +90,70 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 ---
 
 ## 📁 Estructura del Proyecto
+
+proyecto_sena/
+├── README.md
+├── conexion.php
+├── agregar_oferta.php
+├── ofertas.php
+├── editar_oferta.php
+├── trueque_match_db.sql
+└── app_trueque_match/
+├── index.html
+├── login.php
+├── registro.php
+├── dashboard.php
+├── mis_ofertas_ajax.php
+├── guardar_oferta.php
+├── eliminar_oferta.php
+├── cerrar_sesion.php
+├── como-funciona.html
+├── api_login.php
+├── api_registro.php
+├── api_ofertas.php
+├── api_solicitudes.php
+├── api_trueques.php
+├── api_evaluaciones.php
+├── api_favoritos.php
+├── api_notificaciones.php
+├── api_reportes.php
+├── styles.css
+├── app.js
+└── LOGO_FINAL.png
+
+---
+
+## 🎥 Videos de Evidencias
+
+### GA7-AA3-EV01 y EV02 — Video de sustentación
+
+📹 https://youtu.be/Kis8zE8BeT4?si=l61Aqz02DDFPFNM7
+
+En este video se presenta la explicación y desarrollo de las evidencias GA7-220501096-AA3-EV01 y GA7-220501096-AA3-EV02 correspondientes al proyecto app TRUEQUE MATCH.
+
+### GA7-AA5-EV02, EV03 y EV04 — Pruebas de APIs en Postman
+
+📹 *[Pendiente: pegar aquí el enlace del video de Postman]*
+
+---
+
+## 🌍 Despliegue en producción
+
+Trueque Match ya está funcionando en internet, de punta a punta, no solo en el entorno local de XAMPP.
+
+- **URL en vivo:** http://truequematch-gerson.great-site.net/truequematch/app_trueque_match/
+- **Hosting:** InfinityFree (Linux + MySQL/MariaDB), subido manualmente vía File Manager
+- **Verificado en producción:**
+  - ✅ Login real con credenciales de la base de datos (`login.php`)
+  - ✅ Lectura de ofertas (`mis_ofertas_ajax.php`)
+  - ✅ Lectura de trueques, evaluaciones y notificaciones (`dashboard.php`)
+  - ✅ Escritura real: publicación de una oferta nueva de prueba, guardada correctamente en la base de datos de producción (`guardar_oferta.php`)
+
+> Nota técnica: como el hosting de producción usa Linux (sensible a mayúsculas/minúsculas en nombres de tabla) y no está conectado automáticamente a GitHub, cada actualización de código debe subirse manualmente al hosting después de cada `git push` para que el cambio se vea reflejado en la URL en vivo.
+
+---
+
+## 📌 Estado del proyecto
+
+Las 11 APIs REST están confirmadas funcionando tanto por revisión de código como por ejecución real en Postman con datos reales, y el proyecto completo ya está desplegado y verificado en producción (ver sección "Despliegue en producción"). El proyecto sigue en fase de pulido de detalles menores (manual de usuario, exportación de diagramas EER en HD) antes de la recopilación final de evidencias.
+
