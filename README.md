@@ -8,6 +8,8 @@
 **Empresa:** G.L. Software Solutions  
 **SENA 2026**
 
+🌍 **En producción:** http://truequematch-gerson.great-site.net/truequematch/app_trueque_match/
+
 ---
 
 ## 🌐 Descripción
@@ -27,6 +29,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 | APIs REST | 11 endpoints PHP | ✅ Todas probadas en Postman con datos reales |
 | Control de versiones | Git + GitHub | ✅ Funcional |
 | IDE | Visual Studio Code | ✅ Configurado |
+| Hosting / Producción | InfinityFree | ✅ En línea desde septiembre 2026 |
 
 ---
 
@@ -44,6 +47,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 | GA7-220501096-AA4-EV02 y EV03 | Componentes Front-End | ✅ |
 | GA7-220501096-AA3-EV01 y EV02 | Video de sustentación | ✅ |
 | GA7-220501096-AA5-EV02, EV03 y EV04 | APIs REST probadas en Postman (video) | ✅ |
+| GA10-220501097-AA5-EV01 y AA6-EV01 | Despliegue a producción (InfinityFree) | ✅ |
 
 ---
 
@@ -86,55 +90,3 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 ---
 
 ## 📁 Estructura del Proyecto
-
-```
-proyecto_sena/
-├── README.md
-├── conexion.php
-├── agregar_oferta.php
-├── ofertas.php
-├── editar_oferta.php
-├── trueque_match_db.sql
-└── app_trueque_match/
-    ├── index.html
-    ├── login.php
-    ├── registro.php
-    ├── dashboard.php
-    ├── mis_ofertas_ajax.php
-    ├── guardar_oferta.php
-    ├── eliminar_oferta.php
-    ├── cerrar_sesion.php
-    ├── como-funciona.html
-    ├── api_login.php
-    ├── api_registro.php
-    ├── api_ofertas.php
-    ├── api_solicitudes.php
-    ├── api_trueques.php
-    ├── api_evaluaciones.php
-    ├── api_favoritos.php
-    ├── api_notificaciones.php
-    ├── api_reportes.php
-    ├── styles.css
-    ├── app.js
-    └── LOGO_FINAL.png
-```
-
----
-
-## 🎥 Videos de Evidencias
-
-### GA7-AA3-EV01 y EV02 — Video de sustentación
-
-📹 https://youtu.be/Kis8zE8BeT4?si=l61Aqz02DDFPFNM7
-
-En este video se presenta la explicación y desarrollo de las evidencias GA7-220501096-AA3-EV01 y GA7-220501096-AA3-EV02 correspondientes al proyecto app TRUEQUE MATCH.
-
-### GA7-AA5-EV02, EV03 y EV04 — Pruebas de APIs en Postman
-
-📹 *[Pendiente: pegar aquí el enlace del video de Postman]*
-
----
-
-## 📌 Estado del proyecto
-
-Las 11 APIs REST están confirmadas funcionando tanto por revisión de código como por ejecución real en Postman con datos reales. El proyecto sigue en fase de pulido de detalles menores (manual de usuario, exportación de diagramas EER en HD) antes de la recopilación final de evidencias.
