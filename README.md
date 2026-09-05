@@ -92,7 +92,6 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 ## 📁 Estructura del Proyecto
 ```
 proyecto_sena/
-```
 ├── README.md
 ├── conexion.php
 ├── agregar_oferta.php
