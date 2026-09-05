@@ -25,7 +25,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 | Backend Web | PHP 8.2 + MariaDB | ✅ Funcional |
 | Frontend Web | HTML5 + CSS3 + JavaScript | ✅ Funcional |
 | Base de Datos | MariaDB via XAMPP puerto 3307 | ✅ Funcional |
-| App Móvil | React Native + Expo (Android) | ✅ APK en Redmi 9 |
+| App Móvil | React Native + Expo (Android) | ✅ APK en Redmi 10C |
 | APIs REST | 11 endpoints PHP | ✅ Todas probadas en Postman con datos reales |
 | Control de versiones | Git + GitHub | ✅ Funcional |
 | IDE | Visual Studio Code | ✅ Configurado |
@@ -58,16 +58,16 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 
 | Tabla | Descripción |
 |-------|-------------|
-| TIPO_USUARIO | Roles del sistema |
-| USUARIO | Usuarios registrados |
-| ADMINISTRADOR | Gestores del sistema |
-| OFERTA | Publicaciones de intercambio |
-| TRUEQUE | Intercambios formalizados |
-| EVALUACION | Calificaciones 1-5 estrellas |
-| SOLICITUD | Contacto previo al trueque |
-| NOTIFICACION | Alertas del sistema |
-| REPORTE | Denuncias de usuarios |
-| USUARIO_OFERTA | Favoritos (tabla N:M) |
+| tipo_usuario | Roles del sistema |
+| usuario | Usuarios registrados |
+| administrador | Gestores del sistema |
+| oferta | Publicaciones de intercambio |
+| trueque | Intercambios formalizados |
+| evaluacion | Calificaciones 1-5 estrellas |
+| solicitud | Contacto previo al trueque |
+| notificacion | Alertas del sistema |
+| reporte | Denuncias de usuarios |
+| usuario_oferta | Favoritos (tabla N:M) |
 
 ---
 
@@ -133,7 +133,7 @@ En este video se presenta la explicación y desarrollo de las evidencias GA7-220
 
 ### GA7-AA5-EV02, EV03 y EV04 — Pruebas de APIs en Postman
 
-📹 *[Pendiente: pegar aquí el enlace del video de Postman]*
+📹 https://youtu.be/Klnpu9v9o8Y?si=G9hOcj40Blfm2daB
 
 ---
 
