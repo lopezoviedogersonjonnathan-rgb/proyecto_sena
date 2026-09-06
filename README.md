@@ -92,36 +92,35 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 ## 📁 Estructura del Proyecto
 ```
 proyecto_sena/
-├──README.md
-├──conexion.php
-├──agregar_oferta.php
-├──ofertas.php
-├──editar_oferta.php
-├──trueque_match_db.sql
-└──app_trueque_match/
-├──index.html
-├──login.php
-├──registro.php
-├──dashboard.php
-├──mis_ofertas_ajax.php
-├──guardar_oferta.php
-├──eliminar_oferta.php
-├──cerrar_sesion.php
-├──como-funciona.html
-├──api_login.php
-├──api_registro.php
-├──api_ofertas.php
-├──api_solicitudes.php
-├──api_trueques.php
-├──api_evaluaciones.php
-├──api_favoritos.php
-├──api_notificaciones.php
-├──api_reportes.php
-├──styles.css
-├──app.js
-└──LOGO_FINAL.png
+├── README.md
+├── conexion.php
+├── agregar_oferta.php
+├── ofertas.php
+├── editar_oferta.php
+├── trueque_match_db.sql
+└── app_trueque_match/
+    ├── index.html
+    ├── login.php
+    ├── registro.php
+    ├── dashboard.php
+    ├── mis_ofertas_ajax.php
+    ├── guardar_oferta.php
+    ├── eliminar_oferta.php
+    ├── cerrar_sesion.php
+    ├── como-funciona.html
+    ├── api_login.php
+    ├── api_registro.php
+    ├── api_ofertas.php
+    ├── api_solicitudes.php
+    ├── api_trueques.php
+    ├── api_evaluaciones.php
+    ├── api_favoritos.php
+    ├── api_notificaciones.php
+    ├── api_reportes.php
+    ├── styles.css
+    ├── app.js
+    └── LOGO_FINAL.png
 ```
-
 ---
 ## 🎥 Videos de Evidencias
 
