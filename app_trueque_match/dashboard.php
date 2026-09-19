@@ -97,11 +97,50 @@ $r_pendientes = mysqli_query($conexion,
              ELSE t.id_usuario_propone
          END = u.id_usuario
      )
-     WHERE t.id_usuario_propone = $usuario_id
+          WHERE t.id_usuario_propone = $usuario_id
      OR t.id_usuario_recibe = $usuario_id
      ORDER BY t.fecha_propuesta DESC
      LIMIT 5"
 );
+
+// =============================================
+// CONSULTA 5B: TODOS mis trueques (sin límite)
+// para la página completa "Mis Trueques"
+// =============================================
+$r_todos_trueques = mysqli_query($conexion,
+    "SELECT t.*,
+            o1.titulo AS oferta_propone,
+            o1.categoria AS cat_propone,
+            o2.titulo AS oferta_recibe,
+            o2.categoria AS cat_recibe,
+            u.nombre  AS nombre_otro_usuario,
+            e.puntaje AS mi_evaluacion
+     FROM trueque t
+     JOIN oferta o1 ON t.id_oferta_propone = o1.id_oferta
+     JOIN oferta o2 ON t.id_oferta_recibe  = o2.id_oferta
+     JOIN usuario u ON (
+         CASE
+             WHEN t.id_usuario_propone = $usuario_id
+             THEN t.id_usuario_recibe
+             ELSE t.id_usuario_propone
+         END = u.id_usuario
+     )
+     LEFT JOIN evaluacion e ON e.id_trueque = t.id_trueque AND e.id_usuario = $usuario_id
+     WHERE t.id_usuario_propone = $usuario_id
+     OR t.id_usuario_recibe = $usuario_id
+     ORDER BY t.fecha_propuesta DESC"
+);
+// Lo pasamos a un array de PHP para poder contar por estado y recorrerlo varias veces
+$todos_trueques = [];
+if ($r_todos_trueques) {
+    while ($fila = mysqli_fetch_assoc($r_todos_trueques)) {
+        $todos_trueques[] = $fila;
+    }
+}
+$conteo_estado = ['pendiente' => 0, 'aceptado' => 0, 'completado' => 0, 'cancelado' => 0];
+foreach ($todos_trueques as $tt) {
+    if (isset($conteo_estado[$tt['estado']])) $conteo_estado[$tt['estado']]++;
+}
 
 // =============================================
 // CONSULTA 6: Notificaciones no leídas
@@ -481,35 +520,42 @@ mysqli_close($conexion);
       <div class="page-header"><div class="page-title">MIS TRUEQUES</div></div>
       <div class="page-body">
         <div class="tabs-bar">
-          <button class="tab-btn active" onclick="filterTrueques(this,'todos')">Todos (4)</button>
-          <button class="tab-btn" onclick="filterTrueques(this,'pendiente')">Pendientes (1)</button>
-          <button class="tab-btn" onclick="filterTrueques(this,'aceptado')">Aceptados (1)</button>
-          <button class="tab-btn" onclick="filterTrueques(this,'completado')">Completados (2)</button>
+          <button class="tab-btn active" onclick="filterTrueques(this,'todos')">Todos (<?php echo count($todos_trueques); ?>)</button>
+          <button class="tab-btn" onclick="filterTrueques(this,'pendiente')">Pendientes (<?php echo $conteo_estado['pendiente']; ?>)</button>
+          <button class="tab-btn" onclick="filterTrueques(this,'aceptado')">Aceptados (<?php echo $conteo_estado['aceptado']; ?>)</button>
+          <button class="tab-btn" onclick="filterTrueques(this,'completado')">Completados (<?php echo $conteo_estado['completado']; ?>)</button>
         </div>
         <div id="truequesContainer">
-          <div class="trueque-item" data-estado="pendiente">
-            <div class="trueque-exchange"><span class="t-item">🎸 Guitarra acústica</span><span class="t-arrow">⇄</span><span class="t-item">💻 Laptop i5</span></div>
-            <div class="trueque-info"><div class="badge badge-yellow">⏳ Pendiente</div><div class="trueque-user">Con: María G. · 12 Mar 2026</div></div>
+          <?php if (count($todos_trueques) === 0): ?>
+          <div class="trueque-item" style="text-align:center; color:var(--gris-medio); padding:24px;">
+            Todavía no tienes trueques. ¡Explora ofertas y proponé el primero!
+          </div>
+          <?php endif; ?>
+          <?php foreach ($todos_trueques as $tt): ?>
+          <div class="trueque-item" data-estado="<?php echo $tt['estado']; ?>">
+            <div class="trueque-exchange">
+              <span class="t-item"><?php echo $iconos_cat[$tt['cat_propone']] ?? '📦'; ?> <?php echo htmlspecialchars($tt['oferta_propone']); ?></span>
+              <span class="t-arrow">⇄</span>
+              <span class="t-item"><?php echo $iconos_cat[$tt['cat_recibe']] ?? '📦'; ?> <?php echo htmlspecialchars($tt['oferta_recibe']); ?></span>
+            </div>
+            <div class="trueque-info">
+              <div class="badge <?php echo $badge_estado[$tt['estado']] ?? 'badge-yellow'; ?>"><?php echo ucfirst($tt['estado']); ?></div>
+              <div class="trueque-user">Con: <?php echo htmlspecialchars($tt['nombre_otro_usuario']); ?> · <?php echo date('d M Y', strtotime($tt['fecha_propuesta'])); ?></div>
+            </div>
+            <?php if ($tt['estado'] === 'pendiente'): ?>
             <div style="display:flex;gap:6px;">
-              <button class="btn btn-primary btn-sm" onclick="showToast('✅ Trueque aceptado con María')">Aceptar</button>
+              <button class="btn btn-primary btn-sm" onclick="showToast('✅ Trueque aceptado')">Aceptar</button>
               <button class="btn btn-secondary btn-sm" onclick="showToast('❌ Trueque rechazado')">Rechazar</button>
             </div>
-          </div>
-          <div class="trueque-item" data-estado="aceptado">
-            <div class="trueque-exchange"><span class="t-item">📚 Cursos Python</span><span class="t-arrow">⇄</span><span class="t-item">🎨 Ilustraciones</span></div>
-            <div class="trueque-info"><div class="badge badge-green">✅ Aceptado</div><div class="trueque-user">Con: Pedro L. · 5 Mar 2026</div></div>
-            <button class="btn btn-ghost btn-sm" onclick="showSection('chat')">💬 Chat</button>
-          </div>
-          <div class="trueque-item" data-estado="completado">
-            <div class="trueque-exchange"><span class="t-item">🔧 Reparación PC</span><span class="t-arrow">⇄</span><span class="t-item">🍳 Clases cocina</span></div>
-            <div class="trueque-info"><div class="badge badge-blue">🏆 Completado</div><div class="trueque-user">Con: Laura V. · 28 Feb 2026</div></div>
+            <?php elseif ($tt['estado'] === 'completado' && $tt['mi_evaluacion'] === null): ?>
             <button class="btn btn-primary btn-sm" onclick="showToast('⭐ Abriendo evaluación...')">Evaluar</button>
+            <?php elseif ($tt['estado'] === 'completado' && $tt['mi_evaluacion'] !== null): ?>
+            <div class="badge badge-green">⭐ <?php echo $tt['mi_evaluacion']; ?>/5 evaluado</div>
+            <?php elseif ($tt['estado'] === 'aceptado'): ?>
+            <button class="btn btn-ghost btn-sm" onclick="showSection('chat')">💬 Chat</button>
+            <?php endif; ?>
           </div>
-          <div class="trueque-item" data-estado="completado">
-            <div class="trueque-exchange"><span class="t-item">📱 iPhone 11</span><span class="t-arrow">⇄</span><span class="t-item">🎮 PS4</span></div>
-            <div class="trueque-info"><div class="badge badge-blue">🏆 Completado</div><div class="trueque-user">Con: Juan R. · 20 Feb 2026</div></div>
-            <div class="badge badge-green">⭐ 5/5 evaluado</div>
-          </div>
+          <?php endforeach; ?>
         </div>
       </div>
     </div>
