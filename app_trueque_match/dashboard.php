@@ -583,8 +583,8 @@ mysqli_close($conexion);
       <div class="page-body">
         <div class="profile-header-box">
           <div class="avatar avatar-xl" style="margin:0 auto 16px;">G</div>
-          <div style="font-family:var(--font-display); font-size:26px; letter-spacing:1px;" id="profileName">GERSON LÓPEZ</div>
-          <div style="color:var(--gris-medio); font-size:14px; margin-top:4px;" id="profileEmail">gerson@correo.com</div>
+          <div style="font-family:var(--font-display); font-size:26px; letter-spacing:1px;" id="profileName"><?php echo strtoupper($usuario_nombre); ?></div>
+          <div style="color:var(--gris-medio); font-size:14px; margin-top:4px;" id="profileEmail"><?php echo $_SESSION['usuario_correo']; ?></div>
           <div style="color:var(--gris-medio); font-size:13px; margin-top:4px;"><i class="fa fa-map-marker-alt"></i> Bogotá, Colombia</div>
           <div class="profile-stats">
             <div><div class="profile-stat-num">12</div><div class="profile-stat-label">Trueques</div></div>
@@ -742,8 +742,8 @@ window.onload = function() {
   //document.getElementById('sidebarName').textContent = name;
   document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
   //document.getElementById('headerName').textContent = name.toUpperCase();
-  document.getElementById('profileName').textContent = name.toUpperCase() + ' LÓPEZ';
-  document.getElementById('profileEmail').textContent = user + '@correo.com';
+  //document.getElementById('profileName').textContent = name.toUpperCase() + ' LÓPEZ';
+  //document.getElementById('profileEmail').textContent = user + '@correo.com';
   renderDashOfertas(allOfertas);
 };
 
