@@ -317,7 +317,7 @@ mysqli_close($conexion);
     <div id="sec-home">
       <div class="page-header">
         <div>
-          <div class="page-title">BIENVENIDO, <span id="headerName" style="color:var(--rojo-tm)">GERSON</span> 👋</div>
+          <div class="page-title">BIENVENIDO, <span id="headerName" style="color:var(--rojo-tm)"><?php echo strtoupper($usuario_nombre); ?></span> 👋</div>
           <div style="font-size:13px; color:var(--gris-medio);">Aquí tienes un resumen de tu actividad</div>
         </div>
         <button class="btn btn-primary" onclick="showModal('modalOferta')"><i class="fa fa-plus"></i> Nueva Oferta</button>
@@ -739,9 +739,9 @@ mysqli_close($conexion);
 window.onload = function() {
   const user = sessionStorage.getItem('tm_user') || 'Gerson';
   const name = user.charAt(0).toUpperCase() + user.slice(1);
-  document.getElementById('sidebarName').textContent = name;
+  //document.getElementById('sidebarName').textContent = name;
   document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
-  document.getElementById('headerName').textContent = name.toUpperCase();
+  //document.getElementById('headerName').textContent = name.toUpperCase();
   document.getElementById('profileName').textContent = name.toUpperCase() + ' LÓPEZ';
   document.getElementById('profileEmail').textContent = user + '@correo.com';
   renderDashOfertas(allOfertas);
