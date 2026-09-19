@@ -287,7 +287,7 @@ mysqli_close($conexion);
   <nav class="sidebar-nav">
     <div class="sidebar-logo"><img src="LOGO_FINAL.png" alt="Trueque Match" style="height:52px; width:auto;"></div>
     <div class="sidebar-user">
-      <div class="avatar avatar-md" id="sidebarAvatar">G</div>
+      <div class="avatar avatar-md" id="sidebarAvatar"><?php echo strtoupper(substr($usuario_nombre, 0, 1)); ?></div>
       <div>
         <div style="font-size:14px; font-weight:700;" id="sidebarName"><?php echo $usuario_nombre; ?></div>
         <div style="font-size:12px; color:var(--verde);">● En línea</div>
@@ -582,15 +582,15 @@ mysqli_close($conexion);
       <div class="page-header"><div class="page-title">MI PERFIL</div><button class="btn btn-secondary" onclick="showToast('✏️ Modo edición activado')"><i class="fa fa-edit"></i> Editar perfil</button></div>
       <div class="page-body">
         <div class="profile-header-box">
-          <div class="avatar avatar-xl" style="margin:0 auto 16px;">G</div>
+                    <div class="avatar avatar-xl" style="margin:0 auto 16px;"><?php echo strtoupper(substr($usuario_nombre, 0, 1)); ?></div>
           <div style="font-family:var(--font-display); font-size:26px; letter-spacing:1px;" id="profileName"><?php echo strtoupper($usuario_nombre); ?></div>
           <div style="color:var(--gris-medio); font-size:14px; margin-top:4px;" id="profileEmail"><?php echo $_SESSION['usuario_correo']; ?></div>
-          <div style="color:var(--gris-medio); font-size:13px; margin-top:4px;"><i class="fa fa-map-marker-alt"></i> Bogotá, Colombia</div>
+          <div style="color:var(--gris-medio); font-size:13px; margin-top:4px;"><i class="fa fa-map-marker-alt"></i> <?php echo $_SESSION['usuario_ciudad']; ?></div>
           <div class="profile-stats">
-            <div><div class="profile-stat-num">12</div><div class="profile-stat-label">Trueques</div></div>
-            <div><div class="profile-stat-num">8</div><div class="profile-stat-label">Ofertas</div></div>
-            <div><div class="profile-stat-num">4.8⭐</div><div class="profile-stat-label">Reputación</div></div>
-            <div><div class="profile-stat-num">24</div><div class="profile-stat-label">Favoritos</div></div>
+            <div><div class="profile-stat-num"><?php echo $total_trueques; ?></div><div class="profile-stat-label">Trueques</div></div>
+            <div><div class="profile-stat-num"><?php echo $total_ofertas; ?></div><div class="profile-stat-label">Ofertas</div></div>
+            <div><div class="profile-stat-num"><?php echo $reputacion; ?>⭐</div><div class="profile-stat-label">Reputación</div></div>
+            <div><div class="profile-stat-num"><?php echo $total_favs; ?></div><div class="profile-stat-label">Favoritos</div></div>
           </div>
         </div>
         <div style="max-width:560px; margin:0 auto;">
@@ -740,7 +740,7 @@ window.onload = function() {
   const user = sessionStorage.getItem('tm_user') || 'Gerson';
   const name = user.charAt(0).toUpperCase() + user.slice(1);
   //document.getElementById('sidebarName').textContent = name;
-  document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
+  //document.getElementById('sidebarAvatar').textContent = name[0].toUpperCase();
   //document.getElementById('headerName').textContent = name.toUpperCase();
   //document.getElementById('profileName').textContent = name.toUpperCase() + ' LÓPEZ';
   //document.getElementById('profileEmail').textContent = user + '@correo.com';
