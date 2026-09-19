@@ -83,9 +83,11 @@ $total_favs = mysqli_fetch_assoc($r_favs)['total'];
 $r_pendientes = mysqli_query($conexion,
     "SELECT t.*,
             o1.titulo AS oferta_propone,
+            o1.categoria AS cat_propone,
             o2.titulo AS oferta_recibe,
+            o2.categoria AS cat_recibe,
             u.nombre  AS nombre_otro_usuario
-     FROM trueque t
+     FROM trueque t 
      JOIN oferta o1 ON t.id_oferta_propone = o1.id_oferta
      JOIN oferta o2 ON t.id_oferta_recibe  = o2.id_oferta
      JOIN usuario u ON (
@@ -335,35 +337,42 @@ mysqli_close($conexion);
           <h3 style="font-family:var(--font-display); font-size:18px; letter-spacing:1px;">TRUEQUES PENDIENTES</h3>
           <button class="btn btn-ghost btn-sm" onclick="showSection('trueques')">Ver todos</button>
         </div>
+                <?php
+        // Iconos y clases de color según la categoría de la oferta (mismo mapeo que usa el JS del catálogo)
+        $iconos_cat = ['producto' => '📦', 'servicio' => '🛠️', 'conocimiento' => '📚', 'experiencia' => '🎭'];
+        // Color del badge según el estado real del trueque
+        $badge_estado = ['pendiente' => 'badge-yellow', 'aceptado' => 'badge-green', 'completado' => 'badge-blue', 'cancelado' => 'badge-red'];
+        $hay_trueques = false;
+        ?>
+        <?php if ($r_pendientes && mysqli_num_rows($r_pendientes) > 0): ?>
+          <?php while ($tr = mysqli_fetch_assoc($r_pendientes)): $hay_trueques = true; ?>
         <div class="trueque-item">
-          <div class="badge badge-yellow">⏳ Pendiente</div>
+          <div class="badge <?php echo $badge_estado[$tr['estado']] ?? 'badge-yellow'; ?>"><?php echo ucfirst($tr['estado']); ?></div>
           <div class="trueque-exchange">
-            <span class="t-item">🎸 Guitarra acústica</span>
+            <span class="t-item"><?php echo $iconos_cat[$tr['cat_propone']] ?? '📦'; ?> <?php echo htmlspecialchars($tr['oferta_propone']); ?></span>
             <span class="t-arrow">⇄</span>
-            <span class="t-item">💻 Laptop i5</span>
+            <span class="t-item"><?php echo $iconos_cat[$tr['cat_recibe']] ?? '📦'; ?> <?php echo htmlspecialchars($tr['oferta_recibe']); ?></span>
           </div>
           <div class="trueque-info">
-            <div class="badge badge-yellow">Pendiente</div>
-            <div class="trueque-user">Con: María G.</div>
+            <div class="badge <?php echo $badge_estado[$tr['estado']] ?? 'badge-yellow'; ?>"><?php echo ucfirst($tr['estado']); ?></div>
+            <div class="trueque-user">Con: <?php echo htmlspecialchars($tr['nombre_otro_usuario']); ?></div>
           </div>
+          <?php if ($tr['estado'] === 'pendiente'): ?>
           <div style="display:flex; gap:6px;">
             <button class="btn btn-primary btn-sm" onclick="showToast('✅ Trueque aceptado')">Aceptar</button>
             <button class="btn btn-secondary btn-sm" onclick="showToast('❌ Trueque rechazado')">Rechazar</button>
           </div>
-        </div>
-        <div class="trueque-item">
-          <div class="badge badge-green">✅ Aceptado</div>
-          <div class="trueque-exchange">
-            <span class="t-item">📚 Cursos Python</span>
-            <span class="t-arrow">⇄</span>
-            <span class="t-item">🎨 Ilustraciones</span>
-          </div>
-          <div class="trueque-info">
-            <div class="badge badge-green">Aceptado</div>
-            <div class="trueque-user">Con: Pedro L.</div>
-          </div>
+          <?php else: ?>
           <button class="btn btn-ghost btn-sm" onclick="showSection('chat')">Chat</button>
+          <?php endif; ?>
         </div>
+          <?php endwhile; ?>
+        <?php endif; ?>
+        <?php if (!$hay_trueques): ?>
+        <div class="trueque-item" style="text-align:center; color:var(--gris-medio); padding:24px;">
+          Todavía no tienes trueques. ¡Explora ofertas y proponé el primero!
+        </div>
+        <?php endif; ?>
 
         <!-- OFERTAS RECIENTES -->
         <div class="flex justify-between items-center mt-lg mb-md">
