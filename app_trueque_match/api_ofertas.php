@@ -85,9 +85,7 @@ elseif ($metodo === "POST") {
     $descripcion = $_POST["descripcion"] ?? "";
     $categoria   = $_POST["categoria"]   ?? "producto"; // valor por defecto
     $ciudad      = $_POST["ciudad"]      ?? "Bogotá";    // valor por defecto
-    $id_usuario  = $_POST["id_usuario"]  ?? 7; // ID de Gerson en la BD
-
-        $id_usuario  = $_POST["id_usuario"]  ?? ""; // ya no cae en Gerson por defecto, se exige explicito
+    $id_usuario  = $_POST["id_usuario"]  ?? ""; // ya no cae en Gerson por defecto, se exige explicito
 
     // Validamos que los campos obligatorios sí llegaron
     // empty() revisa si la variable está vacía
