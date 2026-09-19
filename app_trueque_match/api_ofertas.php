@@ -87,15 +87,17 @@ elseif ($metodo === "POST") {
     $ciudad      = $_POST["ciudad"]      ?? "Bogotá";    // valor por defecto
     $id_usuario  = $_POST["id_usuario"]  ?? 7; // ID de Gerson en la BD
 
+        $id_usuario  = $_POST["id_usuario"]  ?? ""; // ya no cae en Gerson por defecto, se exige explicito
+
     // Validamos que los campos obligatorios sí llegaron
     // empty() revisa si la variable está vacía
-    if (empty($titulo) || empty($descripcion)) {
+    if (empty($titulo) || empty($descripcion) || empty($id_usuario)) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "El titulo y la descripcion son obligatorios"
+            "mensaje" => "El titulo, la descripcion y el id_usuario son obligatorios"
         ]);
         exit(); // exit() detiene el script para no seguir ejecutando
-    }
+    } 
 
     // Escapamos el texto antes de meterlo al SQL, para que un
     // apóstrofe o comilla en el titulo/descripcion no rompa la
