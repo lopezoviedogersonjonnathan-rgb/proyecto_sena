@@ -785,8 +785,92 @@ mysqli_close($conexion);
 </form>
   </div>
 </div>
+<!-- MODAL EDITAR OFERTA -->
+<div class="modal-overlay" id="modalEditarOferta" onclick="if(event.target===this)closeModal('modalEditarOferta')">
+  <div class="modal" style="max-width:560px;">
+    <div class="modal-title">EDITAR OFERTA</div>
+    <form id="formEditarOferta"
+      style="display:flex; flex-direction:column; gap:16px;"
+      onsubmit="guardarEdicionOferta(event)">
 
-<!-- TOAST CONTAINER -->
+  <input type="hidden" id="edit_id_oferta" name="id_oferta">
+
+  <div class="form-group">
+    <label class="form-label">Título de la oferta</label>
+    <input type="text"
+           id="edit_titulo"
+           name="titulo"
+           class="form-control"
+           placeholder="¿Qué ofreces?"
+           required
+           maxlength="200">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Descripción</label>
+    <textarea id="edit_descripcion"
+              name="descripcion"
+              class="form-control"
+              placeholder="Describe tu oferta con detalle..."
+              required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Categoría</label>
+    <input type="hidden"
+           id="edit_categoria"
+           name="categoria"
+           value="producto">
+    <div class="cat-selector">
+      <div class="cat-option" data-cat="producto" onclick="selectCatEditar(this,'producto')">📦 Producto</div>
+      <div class="cat-option" data-cat="servicio" onclick="selectCatEditar(this,'servicio')">🛠️ Servicio</div>
+      <div class="cat-option" data-cat="conocimiento" onclick="selectCatEditar(this,'conocimiento')">📚 Conocimiento</div>
+      <div class="cat-option" data-cat="experiencia" onclick="selectCatEditar(this,'experiencia')">🎭 Experiencia</div>
+    </div>
+  </div>
+
+  <div class="form-cols">
+    <div class="form-group">
+      <label class="form-label">Ciudad</label>
+      <select id="edit_ciudad"
+              name="ciudad"
+              class="form-control">
+        <option value="Bogotá">Bogotá</option>
+        <option value="Medellín">Medellín</option>
+        <option value="Cali">Cali</option>
+        <option value="Barranquilla">Barranquilla</option>
+        <option value="Cartagena">Cartagena</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Valor estimado (COP)</label>
+      <input type="number"
+             id="edit_valor"
+             name="valor_estimado"
+             class="form-control"
+             placeholder="Opcional"
+             min="0"
+             step="1000">
+    </div>
+  </div>
+
+  <div style="display:flex; gap:10px; margin-top:8px;">
+    <button type="button"
+            class="btn btn-ghost btn-full"
+            onclick="closeModal('modalEditarOferta')">
+      Cancelar
+    </button>
+    <button type="submit"
+            id="btnGuardarEdicion"
+            class="btn btn-primary btn-full">
+      GUARDAR CAMBIOS
+    </button>
+  </div>
+
+</form>
+  </div>
+</div>
+ <!-- TOAST CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
 
 <script>
@@ -971,6 +1055,82 @@ async function submitOferta(e) {
 }
 
 // --- TOAST ---
+// --- EDITAR OFERTA ---
+// Recibimos solo el id porque ya tenemos todos los datos
+// guardados en memoria (todasMisOfertas) desde que cargamos
+// la lista — así evitamos pasar título/descripción por el
+// onclick, que se rompería con comillas o tildes
+function abrirModalEditar(id) {
+  const o = todasMisOfertas.find(function(x) { return x.id_oferta == id; });
+  if (!o) {
+    showToast('❌ No se encontró esa oferta');
+    return;
+  }
+
+  document.getElementById('edit_id_oferta').value   = o.id_oferta;
+  document.getElementById('edit_titulo').value      = o.titulo;
+  document.getElementById('edit_descripcion').value = o.descripcion;
+  document.getElementById('edit_categoria').value   = o.categoria;
+  document.getElementById('edit_ciudad').value      = o.ciudad;
+  document.getElementById('edit_valor').value       = o.valor_estimado;
+
+  // Marcamos visualmente la categoría correcta en los botones
+  document.querySelectorAll('#modalEditarOferta .cat-option').forEach(function(c) {
+    c.classList.toggle('selected', c.getAttribute('data-cat') === o.categoria);
+  });
+
+  showModal('modalEditarOferta');
+}
+
+function selectCatEditar(el, valor) {
+  el.parentElement.querySelectorAll('.cat-option').forEach(function(c) { c.classList.remove('selected'); });
+  el.classList.add('selected');
+  document.getElementById('edit_categoria').value = valor;
+}
+
+async function guardarEdicionOferta(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('btnGuardarEdicion');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  // api_ofertas.php lee el PUT con parse_str(), que espera el
+  // cuerpo en formato "clave=valor&clave2=valor2" — por eso
+  // usamos URLSearchParams y NO FormData (FormData es para POST
+  // con multipart, parse_str no lo entiende)
+  const cuerpo = new URLSearchParams();
+  cuerpo.append('id_oferta',      document.getElementById('edit_id_oferta').value);
+  cuerpo.append('titulo',         document.getElementById('edit_titulo').value.trim());
+  cuerpo.append('descripcion',    document.getElementById('edit_descripcion').value.trim());
+  cuerpo.append('categoria',      document.getElementById('edit_categoria').value);
+  cuerpo.append('ciudad',         document.getElementById('edit_ciudad').value);
+  cuerpo.append('valor_estimado', document.getElementById('edit_valor').value || 0);
+
+  try {
+    const respuesta = await fetch('api_ofertas.php', {
+      method: 'PUT',
+      body: cuerpo
+    });
+    const resultado = await respuesta.json();
+
+    if (resultado.status === 'success') {
+      closeModal('modalEditarOferta');
+      showToast('✅ Oferta actualizada correctamente');
+      cargarMisOfertas(); // recargamos la lista para ver el cambio reflejado
+    } else {
+      showToast('❌ ' + resultado.mensaje);
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('❌ Error de conexión. Revisa que XAMPP esté encendido.');
+
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'GUARDAR CAMBIOS';
+  }
+}
 function showToast(msg) {
   const tc = document.getElementById('toastContainer');
   const t = document.createElement('div');
@@ -1026,7 +1186,7 @@ function renderMisOfertas(lista) {
       (o.valor_estimado > 0 ? '$ ' + parseInt(o.valor_estimado).toLocaleString('es-CO') : 'Valor a convenir') +
       '</div></div>' +
       '<div class="oc-footer">' +
-      '<button class="btn btn-ghost btn-sm" onclick="showToast(\'✏️ Pronto podrás editar\')"><i class="fa fa-edit"></i> Editar</button>' +
+      '<button class="btn btn-ghost btn-sm" onclick="abrirModalEditar(' + o.id_oferta + ')"><i class="fa fa-edit"></i> Editar</button>' +
       '<button class="btn btn-secondary btn-sm" onclick="confirmarEliminar(' + o.id_oferta + ', \'' + o.titulo.replace(/'/g, "\\'") + '\')"><i class="fa fa-trash"></i> Eliminar</button>' +
       '</div></div>';
   }).join('');
