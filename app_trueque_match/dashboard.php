@@ -29,7 +29,16 @@ include('../conexion.php');
 // para usarlo en todas las consultas
 $usuario_id     = $_SESSION['usuario_id'];
 $usuario_nombre = $_SESSION['usuario_nombre'];
-
+// =============================================
+// CONSULTA 0: Traer el teléfono actual del usuario
+// No se guarda en la sesión al loguearse, así que
+// lo traemos aquí para poder precargarlo en el
+// modal de "Editar perfil"
+// =============================================
+$r_telefono = mysqli_query($conexion,
+    "SELECT telefono FROM usuario WHERE id_usuario = $usuario_id"
+);
+$usuario_telefono = mysqli_fetch_assoc($r_telefono)['telefono'] ?? '';
 // =============================================
 // CONSULTA 1: Contar mis ofertas
 // COUNT(*) cuenta cuántas filas devuelve
@@ -634,7 +643,7 @@ mysqli_close($conexion);
 
     <!-- ===== SECCIÓN: PERFIL ===== -->
     <div id="sec-perfil" style="display:none;">
-      <div class="page-header"><div class="page-title">MI PERFIL</div><button class="btn btn-secondary" onclick="showToast('✏️ Modo edición activado')"><i class="fa fa-edit"></i> Editar perfil</button></div>
+      <div class="page-header"><div class="page-title">MI PERFIL</div><button class="btn btn-secondary" onclick="abrirModalEditarPerfil()"><i class="fa fa-edit"></i> Editar perfil</button></div>
       <div class="page-body">
         <div class="profile-header-box">
                     <div class="avatar avatar-xl" style="margin:0 auto 16px;"><?php echo strtoupper(substr($usuario_nombre, 0, 1)); ?></div>
@@ -862,6 +871,70 @@ mysqli_close($conexion);
     </button>
     <button type="submit"
             id="btnGuardarEdicion"
+            class="btn btn-primary btn-full">
+      GUARDAR CAMBIOS
+    </button>
+  </div>
+
+</form>
+  </div>
+</div>
+<!-- MODAL EDITAR PERFIL -->
+<div class="modal-overlay" id="modalEditarPerfil" onclick="if(event.target===this)closeModal('modalEditarPerfil')">
+  <div class="modal" style="max-width:480px;">
+    <div class="modal-title">EDITAR PERFIL</div>
+    <form id="formEditarPerfil"
+      style="display:flex; flex-direction:column; gap:16px;"
+      onsubmit="guardarEdicionPerfil(event)">
+
+  <div class="form-group">
+    <label class="form-label">Nombre completo</label>
+    <input type="text"
+           id="perfil_nombre"
+           name="nombre"
+           class="form-control"
+           value="<?php echo htmlspecialchars($usuario_nombre); ?>"
+           required
+           maxlength="100">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Teléfono</label>
+    <input type="text"
+           id="perfil_telefono"
+           name="telefono"
+           class="form-control"
+           value="<?php echo htmlspecialchars($usuario_telefono); ?>"
+           placeholder="Opcional"
+           maxlength="15">
+  </div>
+
+  <div class="form-group">
+    <label class="form-label">Ciudad</label>
+    <select id="perfil_ciudad" name="ciudad" class="form-control">
+      <?php
+        $ciudades = ['Bogotá','Medellín','Cali','Barranquilla','Cartagena'];
+        $ciudad_actual = $_SESSION['usuario_ciudad'] ?? '';
+        foreach ($ciudades as $c) {
+            $sel = ($c === $ciudad_actual) ? 'selected' : '';
+            echo "<option value=\"$c\" $sel>$c</option>";
+        }
+      ?>
+    </select>
+  </div>
+
+  <div style="color:var(--gris-medio); font-size:12px;">
+    El correo no se puede editar aquí porque también se usa para iniciar sesión.
+  </div>
+
+  <div style="display:flex; gap:10px; margin-top:8px;">
+    <button type="button"
+            class="btn btn-ghost btn-full"
+            onclick="closeModal('modalEditarPerfil')">
+      Cancelar
+    </button>
+    <button type="submit"
+            id="btnGuardarPerfil"
             class="btn btn-primary btn-full">
       GUARDAR CAMBIOS
     </button>
@@ -1127,6 +1200,53 @@ async function guardarEdicionOferta(e) {
     showToast('❌ Error de conexión. Revisa que XAMPP esté encendido.');
 
   } finally {
+    btn.disabled = false;
+    btn.textContent = 'GUARDAR CAMBIOS';
+  }
+}
+// --- EDITAR PERFIL ---
+function abrirModalEditarPerfil() {
+  showModal('modalEditarPerfil');
+}
+
+async function guardarEdicionPerfil(e) {
+  e.preventDefault();
+
+  const btn = document.getElementById('btnGuardarPerfil');
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  // Igual que con las ofertas: api_usuario.php lee el PUT con
+  // parse_str(), así que usamos URLSearchParams, no FormData
+  const cuerpo = new URLSearchParams();
+  cuerpo.append('nombre',   document.getElementById('perfil_nombre').value.trim());
+  cuerpo.append('telefono', document.getElementById('perfil_telefono').value.trim());
+  cuerpo.append('ciudad',   document.getElementById('perfil_ciudad').value);
+
+  try {
+    const respuesta = await fetch('api_usuario.php', {
+      method: 'PUT',
+      body: cuerpo
+    });
+    const resultado = await respuesta.json();
+
+    if (resultado.status === 'success') {
+      showToast('✅ Perfil actualizado correctamente');
+      // Recargamos la página completa: el nombre y la ciudad
+      // aparecen en varios lugares del dashboard (sidebar,
+      // encabezado, Mi Perfil), y todos se llenan desde PHP
+      // al cargar la página, así que un reload los deja
+      // todos correctos de una sola vez
+      setTimeout(() => location.reload(), 800);
+    } else {
+      showToast('❌ ' + resultado.mensaje);
+      btn.disabled = false;
+      btn.textContent = 'GUARDAR CAMBIOS';
+    }
+
+  } catch (error) {
+    console.error('Error:', error);
+    showToast('❌ Error de conexión. Revisa que XAMPP esté encendido.');
     btn.disabled = false;
     btn.textContent = 'GUARDAR CAMBIOS';
   }
