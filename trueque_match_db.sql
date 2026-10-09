@@ -269,7 +269,7 @@ INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `clave_acceso`, `telefo
 (3, 'Sofía Martínez', 'sofia@correo.com', '$2b$10$pL...', '3201122334', 'Cali', NULL, 4.90, '2026-06-04 23:12:51', 1, 1),
 (4, 'Jhon Pérez', 'jhon@correo.com', '$2b$10$mQ...', '3154455667', 'Barranquilla', NULL, 3.50, '2026-06-04 23:12:51', 1, 1),
 (5, 'Arnaldo Montiel', 'arnaldo@trueque.com', '$2b$10$adm..', '3008887766', 'Bogotá', NULL, 5.00, '2026-06-04 23:12:51', 1, 2),
-(6, 'Gerson Lopez Oviedo', 'lopezoviedogersonjonnathan@gmail.com', '$2y$10$u8G3PQsFaGMo7RdBQfSiEuEFN7JnBqSjkNEhf3mJIhBJMDHdM2Kly', NULL, 'Bogotá', NULL, 0.00, '2026-06-06 23:03:26', 1, 1),
+(6, 'Gerson Lopez Oviedo', 'usuario.demo@correo.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', NULL, 'Bogotá', NULL, 0.00, '2026-06-06 23:03:26', 1, 1),
 (7, 'Gerson Lopez', 'gerson@trueque.com', '$2y$10$uS2KTBo50eOHiTdzVyWrL.AJM1l58aJfZ3p4nokWOYemUe2hYPlBS', NULL, 'Bogotá', NULL, 0.00, '2026-06-08 00:59:15', 1, 1);
 
 -- --------------------------------------------------------
