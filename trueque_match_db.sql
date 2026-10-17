@@ -3,9 +3,13 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3307
--- Tiempo de generación: 20-06-2026 a las 18:25:42
+-- Tiempo de generación: 08-10-2026 a las 03:39:55
 -- Versión del servidor: 11.4.10-MariaDB
 -- Versión de PHP: 8.2.12
+--
+-- NOTA: version para el repositorio. Los datos personales reales (correo personal,
+-- telefono) se reemplazaron por datos de demostracion, y todas las cuentas de usuario
+-- usan la contrasena de prueba test1234.
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,8 +24,6 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `trueque_match_db`
 --
-CREATE DATABASE IF NOT EXISTS `trueque_match_db` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `trueque_match_db`;
 
 -- --------------------------------------------------------
 
@@ -61,19 +63,20 @@ CREATE TABLE `evaluacion` (
   `fecha_evaluacion` datetime NOT NULL DEFAULT current_timestamp(),
   `id_usuario` int(11) NOT NULL,
   `id_trueque` int(11) NOT NULL
-) ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `evaluacion`
 --
 
 INSERT INTO `evaluacion` (`id_evaluacion`, `puntaje`, `comentario`, `fecha_evaluacion`, `id_usuario`, `id_trueque`) VALUES
-(1, 5, 'Excelente persona, muy puntual y cumplida', '2026-06-04 23:12:51', 1, 1),
+(1, 5, 'Excelente persona, muy puntual y cumplida', '2026-06-04 23:12:51', 1, 5),
 (2, 5, 'Bici en perfecto estado, tal como la describió', '2026-06-04 23:12:51', 2, 1),
-(3, 4, 'Buena comunicación, artículo en buen estado', '2026-06-04 23:12:51', 4, 3),
-(4, 3, 'Tardó en responder, pero cumplió al final', '2026-06-04 23:12:51', 3, 3),
-(5, 5, 'Excelente intercambio con Gerson', '2026-06-07 04:24:37', 1, 1),
-(6, 4, 'Muy buena experiencia', '2026-06-07 04:24:37', 2, 2);
+(3, 4, 'Tardó en responder, pero cumplió al final', '2026-06-04 23:12:51', 4, 3),
+(4, 3, 'Tardó en responder, pero cumplió al final', '2026-06-04 23:12:51', 4, 5),
+(5, 5, 'Excelente intercambio con Gerson', '2026-06-07 04:24:37', 1, 2),
+(6, 4, 'Muy buena experiencia', '2026-06-07 04:24:37', 2, 2),
+(7, 5, 'Excelente, muy cumplido con el trueque', '2026-07-08 23:04:04', 7, 8);
 
 -- --------------------------------------------------------
 
@@ -101,7 +104,8 @@ INSERT INTO `notificacion` (`id_notificacion`, `mensaje`, `tipo`, `leida`, `fech
 (2, 'Tu trueque #1 fue completado exitosamente', 'trueque', 1, '2026-06-04 23:12:51', 1, 1, NULL),
 (3, 'Recibiste una evaluación de 5 estrellas', 'info', 1, '2026-06-04 23:12:51', 2, 1, NULL),
 (4, 'Sofía propone intercambio por tu teclado', 'alerta', 0, '2026-06-04 23:12:51', 1, NULL, 3),
-(5, 'Tu oferta ha sido guardada como favorita', 'info', 0, '2026-06-04 23:12:51', 4, NULL, 4);
+(5, 'Tu oferta ha sido guardada como favorita', 'info', 0, '2026-06-04 23:12:51', 4, NULL, 4),
+(6, 'Tu trueque fue aceptado', 'trueque', 1, '2026-07-09 20:25:17', 7, 8, NULL);
 
 -- --------------------------------------------------------
 
@@ -127,12 +131,17 @@ CREATE TABLE `oferta` (
 --
 
 INSERT INTO `oferta` (`id_oferta`, `titulo`, `descripcion`, `categoria`, `estado`, `imagen_url`, `ciudad`, `valor_estimado`, `fecha_publicacion`, `id_usuario`) VALUES
-(1, 'Bicicleta MTB talla M', 'Bici en buen estado, frenos de disco', 'producto', 'activa', NULL, 'Bogotá', 350000.00, '2026-06-04 23:12:51', 6),
-(2, 'Clases de inglés 2h/semana', 'Profesora certificada, nivel básico a intermedio', 'conocimiento', 'activa', NULL, 'Medellín', 80000.00, '2026-06-04 23:12:51', 2),
+(1, 'Bicicleta MTB talla M', 'Bici en buen estado, frenos de disco', 'producto', 'intercambiada', NULL, 'Bogotá', 350000.00, '2026-06-04 23:12:51', 6),
+(2, 'Clases de inglés 2h/semana', 'Profesora certificada, nivel básico a intermedio', 'conocimiento', 'intercambiada', NULL, 'Medellín', 80000.00, '2026-06-04 23:12:51', 2),
 (3, 'Teclado mecánico RGB', 'Teclado gaming casi nuevo', 'producto', 'intercambiada', NULL, 'Cali', 220000.00, '2026-06-04 23:12:51', 3),
 (4, 'Tour fotográfico urbano 3h', 'Recorrido con fotógrafo profesional', 'experiencia', 'activa', NULL, 'Bogotá', 150000.00, '2026-06-04 23:12:51', 6),
-(5, 'Guitarra acústica Yamaha', 'En perfecto estado con estuche', 'producto', 'activa', NULL, 'Barranquilla', 400000.00, '2026-06-04 23:12:51', 6),
-(21, 'Curso de guitarra', '15 Claces para principiantes', 'servicio', 'activa', NULL, 'Bogotá', 200000.00, '2026-06-14 21:26:31', 1);
+(5, 'Guitarra acústica Yamaha', 'En perfecto estado con estuche', 'producto', 'intercambiada', NULL, 'Barranquilla', 400000.00, '2026-06-04 23:12:51', 6),
+(21, 'Curso de guitarra', '15 Claces para principiantes', 'servicio', 'activa', NULL, 'Bogotá', 200000.00, '2026-06-14 21:26:31', 1),
+(26, 'Bicicleta AKT talla S', 'En excelente estado, casi nueva', 'producto', 'activa', NULL, 'Bogotá', 400000.00, '2026-06-29 21:12:13', 1),
+(27, 'Prueba conexión BD', 'Esta oferta verifica que el modal guarda en la base de datos', 'producto', 'intercambiada', NULL, 'Bogotá', 50000.00, '2026-07-01 23:05:00', 7),
+(45, 'Guitarra de prueba para trueque', 'Oferta desechable, solo para probar el trueque', 'producto', 'intercambiada', NULL, 'Bogotá', NULL, '2026-08-06 15:08:48', 7),
+(46, 'Bicicleta de prueba para trueque', 'Oferta desechable, solo para probar el trueque', 'producto', 'intercambiada', NULL, 'Bogotá', NULL, '2026-08-06 15:16:36', 1),
+(47, '	Bicicleta de prueba para trueque', 'Oferta desechable, solo para probar el trueque', 'producto', 'activa', NULL, '	Bogotá', NULL, '2026-08-06 16:49:11', 1);
 
 -- --------------------------------------------------------
 
@@ -158,9 +167,10 @@ CREATE TABLE `reporte` (
 --
 
 INSERT INTO `reporte` (`id_reporte`, `motivo`, `descripcion`, `estado`, `fecha_reporte`, `fecha_resolucion`, `id_usuario_reporta`, `id_usuario_reportado`, `id_oferta`, `id_trueque`) VALUES
-(1, 'incumplimiento', 'No se presentó al lugar acordado', 'resuelto', '2026-06-04 23:12:51', NULL, 1, 2, NULL, 1),
+(1, 'incumplimiento', 'No se presentó al lugar acordado', 'resuelto', '2026-06-04 23:12:51', '2026-08-16 22:21:35', 1, 2, NULL, 1),
 (2, 'fraude', 'La oferta no correspondía a la foto', 'pendiente', '2026-06-04 23:12:51', NULL, 3, NULL, 3, NULL),
-(3, 'comportamiento', 'Lenguaje agresivo en el chat', 'pendiente', '2026-06-04 23:12:51', NULL, 2, 4, NULL, 3);
+(3, 'comportamiento', 'Lenguaje agresivo en el chat', 'pendiente', '2026-06-04 23:12:51', NULL, 2, 4, NULL, 3),
+(4, 'incumplimiento', 'El usuario no entrego el producto acordado', 'resuelto', '2026-07-09 20:29:47', '2026-07-09 20:31:52', 7, 6, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -184,7 +194,7 @@ CREATE TABLE `solicitud` (
 --
 
 INSERT INTO `solicitud` (`id_solicitud`, `mensaje`, `estado`, `fecha_solicitud`, `fecha_respuesta`, `id_usuario_solicita`, `id_usuario_recibe`, `id_oferta`) VALUES
-(1, 'Hola, me interesa tu bici. Tengo clases de inglés para ofrecer.', 'aceptada', '2026-06-04 23:12:51', NULL, 2, 1, 1),
+(1, 'Hola, me interesa tu bici. Tengo clases de inglés para ofrecer.', 'aceptada', '2026-06-04 23:12:51', '2026-07-08 22:28:19', 2, 1, 1),
 (2, '¿Aceptas mi tour fotográfico a cambio del teclado?', 'pendiente', '2026-06-04 23:12:51', NULL, 1, 3, 3),
 (3, 'Puedo ofrecerte mi teclado mecánico por la guitarra.', 'aceptada', '2026-06-04 23:12:51', NULL, 3, 4, 5),
 (4, 'No tengo artículos físicos, solo servicios de diseño.', 'rechazada', '2026-06-04 23:12:51', NULL, 5, 2, 2);
@@ -233,11 +243,12 @@ CREATE TABLE `trueque` (
 --
 
 INSERT INTO `trueque` (`id_trueque`, `estado`, `fecha_propuesta`, `fecha_trueque`, `descripcion_acuerdo`, `id_usuario_propone`, `id_oferta_propone`, `id_usuario_recibe`, `id_oferta_recibe`) VALUES
-(1, 'completado', '2026-06-04 23:12:51', '2025-02-25 10:00:00', 'Intercambio en el parque El Virrey a las 10am', 6, 1, 2, 2),
+(1, 'completado', '2026-06-04 23:12:51', '2026-07-08 22:33:32', 'Intercambio en el parque El Virrey a las 10am', 6, 1, 2, 2),
 (2, 'pendiente', '2026-06-04 23:12:51', NULL, 'Por acordar lugar y hora', 6, 3, 1, 4),
 (3, 'aceptado', '2026-06-04 23:12:51', '2025-03-25 15:00:00', 'Nos vemos en el centro comercial', 4, 5, 6, 3),
 (4, 'cancelado', '2026-06-04 23:12:51', NULL, 'El usuario no respondió', 2, 2, 6, 1),
-(5, 'pendiente', '2026-06-04 23:12:51', NULL, 'Esperando confirmación', 1, 4, 4, 5);
+(5, 'pendiente', '2026-06-04 23:12:51', NULL, 'Esperando confirmación', 1, 4, 4, 5),
+(8, 'completado', '2026-07-08 22:57:39', '2026-07-08 22:59:15', 'Cambio prueba conexion BD por guitarra acustica', 7, 27, 6, 5);
 
 -- --------------------------------------------------------
 
@@ -264,13 +275,15 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id_usuario`, `nombre`, `correo`, `clave_acceso`, `telefono`, `ciudad`, `foto_perfil`, `reputacion`, `fecha_registro`, `activo`, `id_tipo_usuario`) VALUES
-(1, 'Laura Gómez', 'laura@correo.com', '$2b$10$xH...', '3001234567', 'Bogotá', NULL, 4.80, '2026-06-04 23:12:51', 1, 1),
-(2, 'Carlos Rueda', 'carlos@correo.com', '$2b$10$aK...', '3109876543', 'Medellín', NULL, 4.60, '2026-06-04 23:12:51', 1, 1),
-(3, 'Sofía Martínez', 'sofia@correo.com', '$2b$10$pL...', '3201122334', 'Cali', NULL, 4.90, '2026-06-04 23:12:51', 1, 1),
-(4, 'Jhon Pérez', 'jhon@correo.com', '$2b$10$mQ...', '3154455667', 'Barranquilla', NULL, 3.50, '2026-06-04 23:12:51', 1, 1),
-(5, 'Arnaldo Montiel', 'arnaldo@trueque.com', '$2b$10$adm..', '3008887766', 'Bogotá', NULL, 5.00, '2026-06-04 23:12:51', 1, 2),
-(6, 'Gerson Lopez Oviedo', 'usuario.demo@correo.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', NULL, 'Bogotá', NULL, 0.00, '2026-06-06 23:03:26', 1, 1),
-(7, 'Gerson Lopez', 'gerson@trueque.com', '$2y$10$uS2KTBo50eOHiTdzVyWrL.AJM1l58aJfZ3p4nokWOYemUe2hYPlBS', NULL, 'Bogotá', NULL, 0.00, '2026-06-08 00:59:15', 1, 1);
+(1, 'Laura Gómez', 'laura@correo.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', '3001234567', 'Cali', NULL, 3.00, '2026-06-04 23:12:51', 1, 1),
+(2, 'Carlos Rueda', 'carlos@correo.com', '$2b$10$7VD7n2CinG7LgaUvYWOP/eSRW8dqY7eQdKS36AyNFUIuQRLnCRRP2', '3109876543', 'Medellín', NULL, 4.60, '2026-06-04 23:12:51', 1, 1),
+(3, 'Sofía Martínez', 'sofia@correo.com', '$2b$10$7i2auFrdxRdsKvNDf1xviu3oG2af/OLUkd6BvJ7qqUkDyF6OjiF5.', '3201122334', 'Cali', NULL, 4.90, '2026-06-04 23:12:51', 1, 1),
+(4, 'Jhon Pérez', 'jhon@correo.com', '$2b$10$4PFzqruFIj6Cz6myufQlheTES4BJCzcN5aVJCAaOqvFEUiBDUDDbm', '3154455667', 'Barranquilla', NULL, 5.00, '2026-06-04 23:12:51', 1, 1),
+(5, 'Arnaldo Montiel', 'arnaldo@trueque.com', '$2b$10$xGn8lLO4e/wXEq8M7yMczeW.y5jS/swdSBTZ5uNKjRvKSVaRD39dm', '3008887766', 'Bogotá', NULL, 5.00, '2026-06-04 23:12:51', 1, 2),
+(6, 'Gerson Lopez Oviedo', 'gerson.demo@trueque.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', NULL, 'Bogotá', NULL, 4.75, '2026-06-06 23:03:26', 1, 1),
+(7, 'Gerson Lopez', 'gerson@trueque.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', '3000000000', 'Bogotá', NULL, 0.00, '2026-06-08 00:59:15', 1, 1),
+(8, 'Usuario Prueba', 'prueba@trueque.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', NULL, 'Prueba2026', NULL, 0.00, '2026-07-05 02:08:56', 1, 1),
+(9, 'Usuario Prueba Postman', 'prueba.postman.1447@trueque.com', '$2b$10$Y/TPUEHwUN.aGLI239A/FuBKaINEz35lVGM8YGz0KBeN/CG9e1C16', NULL, 'Medellin', NULL, 0.00, '2026-08-03 01:07:40', 1, 1);
 
 -- --------------------------------------------------------
 
@@ -402,25 +415,25 @@ ALTER TABLE `evaluacion`
 -- AUTO_INCREMENT de la tabla `notificacion`
 --
 ALTER TABLE `notificacion`
-  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_notificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `oferta`
 --
 ALTER TABLE `oferta`
-  MODIFY `id_oferta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_oferta` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT de la tabla `reporte`
 --
 ALTER TABLE `reporte`
-  MODIFY `id_reporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_reporte` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitud`
 --
 ALTER TABLE `solicitud`
-  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_solicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_usuario`
@@ -432,13 +445,13 @@ ALTER TABLE `tipo_usuario`
 -- AUTO_INCREMENT de la tabla `trueque`
 --
 ALTER TABLE `trueque`
-  MODIFY `id_trueque` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_trueque` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_usuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- Restricciones para tablas volcadas
