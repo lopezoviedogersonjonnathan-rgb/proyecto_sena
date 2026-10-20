@@ -323,8 +323,14 @@ mysqli_close($conexion);
 .cat-option.selected { border-color:var(--rojo-tm); background:var(--rojo-light); color:var(--rojo-tm); }
 .cat-option:hover { border-color:var(--gris-medio); }
 
+.menu-toggle, .menu-backdrop { display:none; }
 @media(max-width:768px){
-  .sidebar-nav { display:none; }
+  /* En celular el menú lateral se oculta fuera de la pantalla y se abre con el botón ☰ */
+  .sidebar-nav { position:fixed; left:0; top:0; z-index:300; transform:translateX(-100%); transition:transform .25s ease; }
+  .sidebar-nav.abierto { transform:translateX(0); }
+  .menu-backdrop.abierto { display:block; position:fixed; inset:0; background:rgba(0,0,0,.6); z-index:250; }
+  .menu-toggle { display:flex; align-items:center; justify-content:center; position:fixed; top:12px; left:12px; z-index:200; width:42px; height:42px; border-radius:10px; background:var(--gris-card); border:1px solid var(--gris-borde); color:var(--blanco-calido); font-size:18px; cursor:pointer; }
+  .main-content { padding-top:56px; }
   .stats-row { grid-template-columns:repeat(2,1fr); }
   .page-body { padding:16px; }
 }
@@ -332,6 +338,10 @@ mysqli_close($conexion);
 </head>
 <body>
 <div class="app-layout">
+
+  <!-- BOTÓN DEL MENÚ (solo se ve en celular) -->
+  <button class="menu-toggle" onclick="toggleMenu()" aria-label="Abrir menú"><i class="fa fa-bars"></i></button>
+  <div class="menu-backdrop" id="menuBackdrop" onclick="toggleMenu()"></div>
 
   <!-- SIDEBAR -->
   <nav class="sidebar-nav">
@@ -374,10 +384,10 @@ mysqli_close($conexion);
       </div>
       <div class="page-body">
         <div class="stats-row">
-          <div class="stat-card"><div class="stat-card-icon">📦</div><div class="stat-card-num"><?php echo $total_ofertas; ?></div><div class="stat-card-label">Mis Ofertas</div><div class="stat-card-delta">↑ 2 esta semana</div></div>
-          <div class="stat-card"><div class="stat-card-icon">🔄</div><div class="stat-card-num"><?php echo $total_trueques; ?></div><div class="stat-card-label">Trueques</div><div class="stat-card-delta">↑ 1 nuevo</div></div>
-          <div class="stat-card"><div class="stat-card-icon">⭐</div><div class="stat-card-num"><?php echo $reputacion; ?></div><div class="stat-card-label">Reputación</div><div class="stat-card-delta">Top 10% de la ciudad</div></div>
-          <div class="stat-card"><div class="stat-card-icon">❤️</div><div class="stat-card-num"><?php echo $total_favs; ?></div><div class="stat-card-label">Favoritos</div><div class="stat-card-delta">3 nuevos guardados</div></div>
+          <div class="stat-card" onclick="showSection('mis-ofertas')" style="cursor:pointer;"><div class="stat-card-icon">📦</div><div class="stat-card-num"><?php echo $total_ofertas; ?></div><div class="stat-card-label">Mis Ofertas</div><div class="stat-card-delta">↑ 2 esta semana</div></div>
+          <div class="stat-card" onclick="showSection('trueques')" style="cursor:pointer;"><div class="stat-card-icon">🔄</div><div class="stat-card-num"><?php echo $total_trueques; ?></div><div class="stat-card-label">Trueques</div><div class="stat-card-delta">↑ 1 nuevo</div></div>
+          <div class="stat-card" onclick="showSection('perfil')" style="cursor:pointer;"><div class="stat-card-icon">⭐</div><div class="stat-card-num"><?php echo $reputacion; ?></div><div class="stat-card-label">Reputación</div><div class="stat-card-delta">Top 10% de la ciudad</div></div>
+          <div class="stat-card" onclick="showSection('perfil')" style="cursor:pointer;"><div class="stat-card-icon">❤️</div><div class="stat-card-num"><?php echo $total_favs; ?></div><div class="stat-card-label">Favoritos</div><div class="stat-card-delta">3 nuevos guardados</div></div>
         </div>
 
         <!-- TRUEQUES PENDIENTES -->
@@ -961,7 +971,18 @@ window.onload = function() {
 
 // --- SECTIONS ---
 const sections = ['home','ofertas','mis-ofertas','trueques','chat','perfil','notificaciones'];
+function toggleMenu() {
+  document.querySelector('.sidebar-nav').classList.toggle('abierto');
+  document.getElementById('menuBackdrop').classList.toggle('abierto');
+}
+
 function showSection(id) {
+  // En celular: cerramos el menú deslizable al elegir una sección
+  const navMovil = document.querySelector('.sidebar-nav');
+  if (navMovil) navMovil.classList.remove('abierto');
+  const fondoMenu = document.getElementById('menuBackdrop');
+  if (fondoMenu) fondoMenu.classList.remove('abierto');
+
   // Ocultamos todas las secciones primero
   sections.forEach(s => {
     document.getElementById('sec-'+s).style.display = 'none';
