@@ -8,7 +8,7 @@
 **Empresa:** G.L. Software Solutions  
 **SENA 2026**
 
-🌍 **En producción:** http://truequematch-gerson.great-site.net/truequematch/app_trueque_match/
+🌍 **En producción:** https://truequematchsena.site.je/app_trueque_match/
 
 ---
 
@@ -140,7 +140,7 @@ En este video se presenta la explicación y desarrollo de las evidencias GA7-220
 
 Trueque Match ya está funcionando en internet, de punta a punta, no solo en el entorno local de XAMPP.
 
-- **URL en vivo:** http://truequematch-gerson.great-site.net/truequematch/app_trueque_match/
+- **URL en vivo:** https://truequematchsena.site.je/app_trueque_match/
 - **Hosting:** InfinityFree (Linux + MySQL/MariaDB), subido manualmente vía File Manager
 - **Verificado en producción:**
   - ✅ Login real con credenciales de la base de datos (`login.php`)
