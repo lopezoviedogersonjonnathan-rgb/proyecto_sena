@@ -26,7 +26,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 | Frontend Web | HTML5 + CSS3 + JavaScript | ✅ Funcional |
 | Base de Datos | MariaDB via XAMPP puerto 3307 | ✅ Funcional |
 | App Móvil | React Native + Expo (Android) | ✅ Probada en Redmi 9 (Gerson) y Redmi 10C (Sandra) |
-| APIs REST | 11 endpoints PHP | ✅ Todas probadas en Postman con datos reales |
+| APIs REST | 10 endpoints PHP | ✅ Todas probadas en Postman con datos reales |
 | Control de versiones | Git + GitHub | ✅ Funcional |
 | IDE | Visual Studio Code | ✅ Configurado |
 | Hosting / Producción | InfinityFree | ✅ En línea desde septiembre 2026 |
@@ -71,7 +71,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 
 ---
 
-## 🔌 APIs REST (11 endpoints — todas probadas en Postman)
+## 🔌 APIs REST (10 endpoints — todas probadas en Postman)
 
 | API | Recurso que maneja |
 |-----|--------------------|
@@ -84,6 +84,7 @@ Trueque Match es una aplicación web y móvil que permite a los colombianos inte
 | `api_favoritos.php` | Ofertas favoritas de cada usuario |
 | `api_notificaciones.php` | Notificaciones del sistema |
 | `api_reportes.php` | Reportes/denuncias de usuarios |
+| `api_usuario.php` | Perfil del usuario: editar nombre, teléfono y ciudad (PUT). Usa la sesión activa, no un id enviado en la petición |
 
 > Nota: `api_ofertas.php` es el único endpoint oficial para editar y eliminar ofertas (PUT/DELETE). Los antiguos `api_editar_oferta.php` y `api_eliminar_oferta.php` fueron retirados para evitar duplicidad de código.
 
@@ -98,6 +99,7 @@ proyecto_sena/
 ├── ofertas.php
 ├── editar_oferta.php
 ├── trueque_match_db.sql
+├── postman/
 └── app_trueque_match/
     ├── index.html
     ├── login.php
@@ -108,6 +110,7 @@ proyecto_sena/
     ├── eliminar_oferta.php
     ├── cerrar_sesion.php
     ├── como-funciona.html
+    ├── ofertas.html
     ├── api_login.php
     ├── api_registro.php
     ├── api_ofertas.php
@@ -117,6 +120,7 @@ proyecto_sena/
     ├── api_favoritos.php
     ├── api_notificaciones.php
     ├── api_reportes.php
+    ├── api_usuario.php
     ├── styles.css
     ├── app.js
     └── LOGO_FINAL.png
@@ -154,5 +158,5 @@ Trueque Match ya está funcionando en internet, de punta a punta, no solo en el 
 
 ## 📌 Estado del proyecto
 
-Las 11 APIs REST están confirmadas funcionando tanto por revisión de código como por ejecución real en Postman con datos reales, y el proyecto completo ya está desplegado y verificado en producción (ver sección "Despliegue en producción"). El proyecto sigue en fase de pulido de detalles menores (manual de usuario, exportación de diagramas EER en HD) antes de la recopilación final de evidencias.
+Las 10 APIs REST están confirmadas funcionando tanto por revisión de código como por ejecución real en Postman con datos reales, y el proyecto completo ya está desplegado y verificado en producción (ver sección "Despliegue en producción"). El proyecto sigue en fase de pulido de detalles menores (manual de usuario, exportación de diagramas EER en HD) antes de la recopilación final de evidencias.
 
