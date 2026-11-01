@@ -18,6 +18,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 $metodo = $_SERVER["REQUEST_METHOD"];
@@ -68,7 +70,7 @@ if ($metodo === "GET") {
     // id_usuario aquí filtra por quién ESCRIBIÓ la evaluación,
     // no por quién la recibió (para eso existe reputacion en la
     // tabla usuario, ya calculada)
-    $id_usuario = $_GET["id_usuario"] ?? "";
+    $id_usuario = intval($_GET["id_usuario"] ?? 0);
 
     if (!empty($id_usuario)) {
         $sql = "SELECT * FROM evaluacion WHERE id_usuario = $id_usuario ORDER BY fecha_evaluacion DESC";
@@ -96,15 +98,15 @@ if ($metodo === "GET") {
 // ============================================================
 elseif ($metodo === "POST") {
 
-    $puntaje    = $_POST["puntaje"]    ?? "";
+    $puntaje    = intval($_POST["puntaje"] ?? 0);
     $comentario = $_POST["comentario"] ?? "";
-    $id_usuario = $_POST["id_usuario"] ?? ""; // quien escribe la calificación
-    $id_trueque = $_POST["id_trueque"] ?? "";
+    $id_usuario = usuario_sesion(); // quien escribe la calificación
+    $id_trueque = intval($_POST["id_trueque"] ?? 0);
 
-    if (empty($puntaje) || empty($id_usuario) || empty($id_trueque)) {
+    if (empty($puntaje) || empty($id_trueque)) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "puntaje, id_usuario e id_trueque son obligatorios"
+            "mensaje" => "puntaje e id_trueque son obligatorios"
         ]);
         exit();
     }
@@ -181,8 +183,8 @@ elseif ($metodo === "PUT") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_evaluacion = $datos["id_evaluacion"] ?? "";
-    $puntaje       = $datos["puntaje"]       ?? "";
+    $id_evaluacion = intval($datos["id_evaluacion"] ?? 0);
+    $puntaje       = intval($datos["puntaje"] ?? 0);
     $comentario    = $datos["comentario"]    ?? "";
 
     if (empty($id_evaluacion)) {
@@ -246,7 +248,7 @@ elseif ($metodo === "DELETE") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_evaluacion = $datos["id_evaluacion"] ?? "";
+    $id_evaluacion = intval($datos["id_evaluacion"] ?? 0);
 
     if (empty($id_evaluacion)) {
         echo json_encode([

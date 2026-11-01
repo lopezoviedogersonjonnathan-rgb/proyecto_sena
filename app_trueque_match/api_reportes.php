@@ -14,6 +14,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 $metodo = $_SERVER["REQUEST_METHOD"];
@@ -57,10 +59,10 @@ elseif ($metodo === "POST") {
 
     $motivo               = $_POST["motivo"]               ?? "";
     $descripcion          = $_POST["descripcion"]          ?? "";
-    $id_usuario_reporta   = $_POST["id_usuario_reporta"]   ?? "";
-    $id_usuario_reportado = $_POST["id_usuario_reportado"] ?? null;
-    $id_oferta            = $_POST["id_oferta"]            ?? null;
-    $id_trueque           = $_POST["id_trueque"]            ?? null;
+    $id_usuario_reporta   = usuario_sesion();
+    $id_usuario_reportado = intval($_POST["id_usuario_reportado"] ?? 0);
+    $id_oferta            = intval($_POST["id_oferta"] ?? 0);
+    $id_trueque           = intval($_POST["id_trueque"] ?? 0);
 
     if (empty($motivo) || empty($descripcion) || empty($id_usuario_reporta)) {
         echo json_encode([
@@ -117,7 +119,7 @@ elseif ($metodo === "PUT") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_reporte = $datos["id_reporte"] ?? "";
+    $id_reporte = intval($datos["id_reporte"] ?? 0);
     $estado     = $datos["estado"]     ?? "";
 
     if (empty($id_reporte)) {
@@ -168,7 +170,7 @@ elseif ($metodo === "DELETE") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_reporte = $datos["id_reporte"] ?? "";
+    $id_reporte = intval($datos["id_reporte"] ?? 0);
 
     if (empty($id_reporte)) {
         echo json_encode([

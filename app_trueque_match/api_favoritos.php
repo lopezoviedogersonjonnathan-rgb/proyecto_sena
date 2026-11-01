@@ -19,6 +19,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 $metodo = $_SERVER["REQUEST_METHOD"];
@@ -28,7 +30,7 @@ $metodo = $_SERVER["REQUEST_METHOD"];
 // ============================================================
 if ($metodo === "GET") {
 
-    $id_usuario = $_GET["id_usuario"] ?? "";
+    $id_usuario = usuario_sesion();
 
     if (empty($id_usuario)) {
         echo json_encode([
@@ -68,8 +70,8 @@ if ($metodo === "GET") {
 // ============================================================
 elseif ($metodo === "POST") {
 
-    $id_usuario = $_POST["id_usuario"] ?? "";
-    $id_oferta  = $_POST["id_oferta"]  ?? "";
+    $id_usuario = usuario_sesion();
+    $id_oferta  = intval($_POST["id_oferta"] ?? 0);
 
     if (empty($id_usuario) || empty($id_oferta)) {
         echo json_encode([
@@ -117,8 +119,8 @@ elseif ($metodo === "DELETE") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_usuario = $datos["id_usuario"] ?? "";
-    $id_oferta  = $datos["id_oferta"]  ?? "";
+    $id_usuario = usuario_sesion();
+    $id_oferta  = intval($datos["id_oferta"] ?? 0);
 
     if (empty($id_usuario) || empty($id_oferta)) {
         echo json_encode([

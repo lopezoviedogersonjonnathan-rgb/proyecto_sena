@@ -27,6 +27,8 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 // Traemos el archivo que ya tiene armada la conexión a MariaDB
 // (usa require_once para no repetir la conexión si ya existe)
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 // $_SERVER["REQUEST_METHOD"] nos dice qué tipo de petición
@@ -85,17 +87,27 @@ elseif ($metodo === "POST") {
     $descripcion = $_POST["descripcion"] ?? "";
     $categoria   = $_POST["categoria"]   ?? "producto"; // valor por defecto
     $ciudad      = $_POST["ciudad"]      ?? "Bogotá";    // valor por defecto
-    $id_usuario  = $_POST["id_usuario"]  ?? ""; // ya no cae en Gerson por defecto, se exige explicito
+    $id_usuario  = usuario_sesion(); // el dueño sale de la SESIÓN, no de lo que mande el cliente
 
     // Validamos que los campos obligatorios sí llegaron
     // empty() revisa si la variable está vacía
-    if (empty($titulo) || empty($descripcion) || empty($id_usuario)) {
+    if (empty($titulo) || empty($descripcion)) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "El titulo, la descripcion y el id_usuario son obligatorios"
+            "mensaje" => "El titulo y la descripcion son obligatorios"
         ]);
         exit(); // exit() detiene el script para no seguir ejecutando
-    } 
+    }
+
+    // La categoría solo puede ser una de la lista permitida.
+    // Antes se metía al SQL sin revisar (riesgo de inyección SQL).
+    if (!in_array($categoria, $categorias_validas, true)) {
+        echo json_encode([
+            "status" => "error",
+            "mensaje" => "Categoria no valida"
+        ]);
+        exit();
+    }
 
     // Escapamos el texto antes de meterlo al SQL, para que un
     // apóstrofe o comilla en el titulo/descripcion no rompa la
@@ -191,11 +203,11 @@ elseif ($metodo === "PUT") {
     // Verificamos que la oferta exista ANTES de intentar editarla.
     // Así evitamos ejecutar un UPDATE que no cambia nada porque
     // el ID no existe, y le damos un mensaje claro a quien prueba
-    $check = mysqli_query($conexion, "SELECT id_oferta FROM oferta WHERE id_oferta = $id_oferta");
+    $check = mysqli_query($conexion, "SELECT id_oferta FROM oferta WHERE id_oferta = $id_oferta AND id_usuario = " . usuario_sesion());
     if (mysqli_num_rows($check) === 0) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "La oferta no existe"
+            "mensaje" => "La oferta no existe o no te pertenece"
         ]);
         exit();
     }
@@ -264,11 +276,11 @@ elseif ($metodo === "DELETE") {
     // alguien manda un ID que ya no existe (por ejemplo, uno que
     // ya se completó en un trueque), el mensaje es claro en vez
     // de un DELETE silencioso que no borra nada
-    $check = mysqli_query($conexion, "SELECT id_oferta FROM oferta WHERE id_oferta = $id_oferta");
+    $check = mysqli_query($conexion, "SELECT id_oferta FROM oferta WHERE id_oferta = $id_oferta AND id_usuario = " . usuario_sesion());
     if (mysqli_num_rows($check) === 0) {
         echo json_encode([
             "status" => "error",
-            "mensaje" => "No existe una oferta con ese ID"
+            "mensaje" => "No existe una oferta tuya con ese ID"
         ]);
         exit();
     }

@@ -19,6 +19,8 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Traemos la conexión ya armada a MariaDB
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 // Guardamos qué tipo de petición llegó
@@ -32,7 +34,7 @@ if ($metodo === "GET") {
     // id_usuario es opcional: si llega, mostramos solo los
     // trueques donde ese usuario participa (como quien propone
     // o como quien recibe la propuesta)
-    $id_usuario = $_GET["id_usuario"] ?? "";
+    $id_usuario = intval($_GET["id_usuario"] ?? 0);
 
     if (!empty($id_usuario)) {
         $sql = "SELECT t.id_trueque, t.estado, t.fecha_propuesta, t.fecha_trueque, 
@@ -77,10 +79,10 @@ if ($metodo === "GET") {
 // ============================================================
 elseif ($metodo === "POST") {
 
-    $id_usuario_propone = $_POST["id_usuario_propone"] ?? "";
-    $id_oferta_propone  = $_POST["id_oferta_propone"]  ?? "";
-    $id_usuario_recibe  = $_POST["id_usuario_recibe"]  ?? "";
-    $id_oferta_recibe   = $_POST["id_oferta_recibe"]   ?? "";
+    $id_usuario_propone = usuario_sesion();
+    $id_oferta_propone  = intval($_POST["id_oferta_propone"] ?? 0);
+    $id_usuario_recibe  = intval($_POST["id_usuario_recibe"] ?? 0);
+    $id_oferta_recibe   = intval($_POST["id_oferta_recibe"] ?? 0);
     $descripcion_acuerdo = $_POST["descripcion_acuerdo"] ?? "";
 
     // Los cuatro IDs son obligatorios: sin ellos no sabemos
@@ -143,7 +145,7 @@ elseif ($metodo === "PUT") {
     // PUT no llena $_POST automáticamente, leemos el cuerpo a mano
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_trueque = $datos["id_trueque"] ?? "";
+    $id_trueque = intval($datos["id_trueque"] ?? 0);
     $estado     = $datos["estado"]     ?? "";
 
     if (empty($id_trueque)) {
@@ -215,7 +217,7 @@ elseif ($metodo === "DELETE") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_trueque = $datos["id_trueque"] ?? "";
+    $id_trueque = intval($datos["id_trueque"] ?? 0);
 
     if (empty($id_trueque)) {
         echo json_encode([

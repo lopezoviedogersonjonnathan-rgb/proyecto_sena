@@ -14,6 +14,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 $metodo = $_SERVER["REQUEST_METHOD"];
@@ -23,7 +25,7 @@ $metodo = $_SERVER["REQUEST_METHOD"];
 // ============================================================
 if ($metodo === "GET") {
 
-    $id_usuario = $_GET["id_usuario"] ?? "";
+    $id_usuario = usuario_sesion();
 
     if (empty($id_usuario)) {
         echo json_encode([
@@ -67,9 +69,9 @@ elseif ($metodo === "POST") {
 
     $mensaje    = $_POST["mensaje"]    ?? "";
     $tipo       = $_POST["tipo"]       ?? "info";
-    $id_usuario = $_POST["id_usuario"] ?? "";
-    $id_trueque = $_POST["id_trueque"] ?? null;
-    $id_oferta  = $_POST["id_oferta"]  ?? null;
+    $id_usuario = intval($_POST["id_usuario"] ?? 0);
+    $id_trueque = intval($_POST["id_trueque"] ?? 0);
+    $id_oferta  = intval($_POST["id_oferta"] ?? 0);
 
     if (empty($mensaje) || empty($id_usuario)) {
         echo json_encode([
@@ -123,7 +125,7 @@ elseif ($metodo === "PUT") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_notificacion = $datos["id_notificacion"] ?? "";
+    $id_notificacion = intval($datos["id_notificacion"] ?? 0);
 
     if (empty($id_notificacion)) {
         echo json_encode([
@@ -159,7 +161,7 @@ elseif ($metodo === "DELETE") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_notificacion = $datos["id_notificacion"] ?? "";
+    $id_notificacion = intval($datos["id_notificacion"] ?? 0);
 
     if (empty($id_notificacion)) {
         echo json_encode([

@@ -23,6 +23,8 @@ header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
 header("Access-Control-Allow-Headers: Content-Type");
 
 // Traemos la conexión ya armada a MariaDB
+require_once "seguridad.php"; // guardia: sin sesión iniciada responde 401 y no llega a la base de datos
+exigir_sesion();
 require_once "../conexion.php";
 
 // Guardamos qué tipo de petición llegó (GET, POST, PUT o DELETE)
@@ -38,7 +40,7 @@ if ($metodo === "GET") {
     // id_usuario_recibe es opcional: si llega, filtramos
     // solo las solicitudes de ESE usuario. Si no llega,
     // mostramos todas (útil para pruebas en Postman)
-    $id_usuario_recibe = $_GET["id_usuario_recibe"] ?? "";
+    $id_usuario_recibe = intval($_GET["id_usuario_recibe"] ?? 0);
 
     if (!empty($id_usuario_recibe)) {
         $sql = "SELECT s.id_solicitud, s.mensaje, s.estado, s.fecha_solicitud, 
@@ -78,9 +80,9 @@ if ($metodo === "GET") {
 elseif ($metodo === "POST") {
 
     $mensaje             = $_POST["mensaje"]             ?? "";
-    $id_usuario_solicita = $_POST["id_usuario_solicita"]  ?? "";
-    $id_usuario_recibe   = $_POST["id_usuario_recibe"]    ?? "";
-    $id_oferta           = $_POST["id_oferta"]            ?? "";
+    $id_usuario_solicita = usuario_sesion();
+    $id_usuario_recibe   = intval($_POST["id_usuario_recibe"] ?? 0);
+    $id_oferta           = intval($_POST["id_oferta"] ?? 0);
 
     // Validamos que lleguen los tres IDs, sin ellos no
     // sabemos quién le escribe a quién ni sobre qué oferta
@@ -142,7 +144,7 @@ elseif ($metodo === "PUT") {
     // el cuerpo de la petición a mano
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_solicitud = $datos["id_solicitud"] ?? "";
+    $id_solicitud = intval($datos["id_solicitud"] ?? 0);
     $estado       = $datos["estado"]       ?? "";
 
     if (empty($id_solicitud)) {
@@ -194,7 +196,7 @@ elseif ($metodo === "DELETE") {
 
     parse_str(file_get_contents("php://input"), $datos);
 
-    $id_solicitud = $datos["id_solicitud"] ?? "";
+    $id_solicitud = intval($datos["id_solicitud"] ?? 0);
 
     if (empty($id_solicitud)) {
         echo json_encode([
