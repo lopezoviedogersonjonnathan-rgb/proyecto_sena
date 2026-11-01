@@ -673,7 +673,7 @@
 				{
 					"name": "PUT — Aceptar el trueque",
 					"request": {
-						"method": "GET",
+						"method": "PUT",
 						"header": []
 					},
 					"response": []
